@@ -1,0 +1,14 @@
+{
+  "name": "N Prep School Auto Play",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "description": "This is a Chrome extension that automatically plays N Prep School videos",
+  "author": "minagishl@icloud.com",
+  "content_scripts": [
+    {
+      "matches": ["https://www.nnn.ed.nico/*"],
+      "run_at": "document_idle",
+      "js": ["index.js"]
+    }
+  ]
+}

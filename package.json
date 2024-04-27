@@ -1,0 +1,22 @@
+{
+  "name": "n-yobikou-video-autoplay-chrome-extension",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/minagishl/n-yobikou-video-autoplay-chrome-extension.git"
+  },
+  "author": "minagishl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/minagishl/n-yobikou-video-autoplay-chrome-extension/issues"
+  },
+  "homepage": "https://github.com/minagishl/n-yobikou-video-autoplay-chrome-extension#readme",
+  "description": "This is a Chrome extension that automatically plays N Prep School videos",
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  }
+}
