@@ -31,19 +31,18 @@ const callback = function (mutationsList, _) {
         if (videoPlayer) {
           observer.disconnect();
           console.log('Video player found.');
-          videoPlayer.addEventListener('ended', async () => {
-            handleVideoEnd();
-          });
-
           if (videoPlayer.ended) {
-            observer.disconnect();
             handleVideoEnd();
+          } else {
+            videoPlayer.addEventListener('ended', async () => {
+              handleVideoEnd();
+            });
           }
 
-          // Re-observe after 250ms
+          // Re-observe after 100ms
           setTimeout(() => {
             observer.observe(targetNode, config);
-          }, 250);
+          }, 100);
         } else {
           console.log('Video player not found.');
         }
