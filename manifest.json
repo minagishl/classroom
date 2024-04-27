@@ -4,6 +4,10 @@
   "manifest_version": 3,
   "description": "This is a Chrome extension that automatically plays N Prep School videos",
   "author": "minagishl@icloud.com",
+  "permissions": ["contextMenus", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": ["https://www.nnn.ed.nico/*"],

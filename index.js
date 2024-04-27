@@ -9,22 +9,45 @@ const config = {
   subtree: true,
 };
 
-function handleVideoEnd() {
-  const currentTime = Date.now();
-  if (currentTime - lastExecutionTime < 5000) {
-    // If it has been within 5 seconds since the last execution, exit the function without executing console.log.
-    return;
-  }
-  lastExecutionTime = currentTime;
+let isEnabled = true;
 
-  console.log('Video ended.');
-  const list = getList();
-  const index = findIndex(list);
-  if (index !== -1) {
-    console.log('Moving to the next video.');
-    moveElement(index + 1);
+chrome.storage.sync.get('enabled', (data) => {
+  isEnabled = data.enabled;
+  if (isEnabled === undefined) {
+    chrome.storage.sync.set({ enabled: true });
+  } else if (isEnabled) {
+    console.log('Extension is enabled.');
   } else {
-    console.log('All videos have been completed.');
+    console.log('Extension is disabled.');
+  }
+});
+
+chrome.storage.onChanged.addListener((changes) => {
+  if (changes.enabled) {
+    isEnabled = changes.enabled.newValue;
+    console.log(`Extension is now ${isEnabled ? 'enabled' : 'disabled'}`);
+    window.alert(`Extension is now ${isEnabled ? 'enabled' : 'disabled'}`);
+  }
+});
+
+function handleVideoEnd() {
+  if (isEnabled) {
+    const currentTime = Date.now();
+    if (currentTime - lastExecutionTime < 5000) {
+      // If it has been within 5 seconds since the last execution, exit the function without executing console.log.
+      return;
+    }
+    lastExecutionTime = currentTime;
+
+    console.log('Video ended.');
+    const list = getList();
+    const index = findIndex(list);
+    if (index !== -1) {
+      console.log('Moving to the next video.');
+      moveElement(index + 1);
+    } else {
+      console.log('All videos have been completed.');
+    }
   }
 }
 
