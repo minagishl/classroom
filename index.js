@@ -1,6 +1,7 @@
 console.log('Extension loaded.');
 
 const targetNode = document.body;
+let lastExecutionTime = 0;
 
 const config = {
   childList: true,
@@ -9,6 +10,13 @@ const config = {
 };
 
 function handleVideoEnd() {
+  const currentTime = Date.now();
+  if (currentTime - lastExecutionTime < 5000) {
+    // If it has been within 5 seconds since the last execution, exit the function without executing console.log.
+    return;
+  }
+  lastExecutionTime = currentTime;
+
   console.log('Video ended.');
   const list = getList();
   const index = findIndex(list);
@@ -38,11 +46,6 @@ const callback = function (mutationsList, _) {
               handleVideoEnd();
             });
           }
-
-          // Re-observe after 100ms
-          setTimeout(() => {
-            observer.observe(targetNode, config);
-          }, 100);
         } else {
           console.log('Video player not found.');
         }
