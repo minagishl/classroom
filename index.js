@@ -31,10 +31,10 @@ const callback = function (mutationsList, _) {
             }
           });
 
-          // Re-observe after 5 seconds.
+          // Re-observe after 250ms
           setTimeout(() => {
             observer.observe(targetNode, config);
-          }, 5000);
+          }, 250);
         } else {
           console.log('Video player not found.');
         }
