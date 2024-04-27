@@ -8,6 +8,18 @@ const config = {
   subtree: true,
 };
 
+function handleVideoEnd() {
+  console.log('Video ended.');
+  const list = getList();
+  const index = findIndex(list);
+  if (index !== -1) {
+    console.log('Moving to the next video.');
+    moveElement(index + 1);
+  } else {
+    console.log('All videos have been completed.');
+  }
+}
+
 const callback = function (mutationsList, _) {
   for (let mutation of mutationsList) {
     if (mutation.type === 'childList') {
@@ -20,16 +32,13 @@ const callback = function (mutationsList, _) {
           observer.disconnect();
           console.log('Video player found.');
           videoPlayer.addEventListener('ended', async () => {
-            console.log('Video ended.');
-            const list = getList();
-            const index = findIndex(list);
-            if (index !== -1) {
-              console.log('Moving to the next video.');
-              moveElement(index + 1);
-            } else {
-              console.log('All videos have been completed.');
-            }
+            handleVideoEnd();
           });
+
+          if (videoPlayer.ended) {
+            observer.disconnect();
+            handleVideoEnd();
+          }
 
           // Re-observe after 250ms
           setTimeout(() => {
