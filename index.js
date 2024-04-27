@@ -112,10 +112,10 @@ function getList() {
       null,
     ).singleNodeValue;
 
-    const iconXpath1 = `/html/body/div[2]/div/div[2]/div[2]/main/div[2]/div/div[1]/ul/li[${i}]/div/div/div[1]/div[1]/div//i`;
+    const iconXpath = `/html/body/div[2]/div/div[2]/div[2]/main/div[2]/div/div[1]/ul/li[${i}]/div/div/div[1]/div[1]/div//i`;
 
     let iconElement = document.evaluate(
-      iconXpath1,
+      iconXpath,
       document,
       null,
       XPathResult.FIRST_ORDERED_NODE_TYPE,
