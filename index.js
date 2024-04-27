@@ -104,8 +104,7 @@ function getList() {
       null,
     ).singleNodeValue;
 
-    const iconXpath1 = `/html/body/div[2]/div/div[2]/div[2]/main/div[2]/div/div[1]/ul/li[${i}]/div/div/div[1]/div[1]/div/div/i`;
-    const iconXpath2 = `/html/body/div[2]/div/div[2]/div[2]/main/div[2]/div/div[1]/ul/li[${i}]/div/div/div[1]/div[1]/div/i`;
+    const iconXpath1 = `/html/body/div[2]/div/div[2]/div[2]/main/div[2]/div/div[1]/ul/li[${i}]/div/div/div[1]/div[1]/div//i`;
 
     let iconElement = document.evaluate(
       iconXpath1,
@@ -114,16 +113,6 @@ function getList() {
       XPathResult.FIRST_ORDERED_NODE_TYPE,
       null,
     ).singleNodeValue;
-
-    if (!iconElement) {
-      iconElement = document.evaluate(
-        iconXpath2,
-        document,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null,
-      ).singleNodeValue;
-    }
 
     if (!element) {
       // Outputs an error if it does not exist
