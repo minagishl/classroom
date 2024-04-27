@@ -12,6 +12,14 @@ This application does not interfere with Nyobikou's servers in any way.
 
 All data is scraped from the currently displayed web page and converted for use.
 
+<!--
+
+When I add this code, the name of the extension is “N Prep School Auto Play”, but the repository name says “Nyobikou”
+
+There is a reason for this, and it's because the official accounts on YouTube and other sites use that name, but I didn't like it myself, so I changed the name of the extension!
+
+-->
+
 ## Usage
 
 1. Clone this repository
