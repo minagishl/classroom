@@ -112,11 +112,9 @@ function getList() {
   }
 
   const list = element.map((element) => {
-    const title = element.textContent.trim().replace(
-      // Clean up the title.
-      /^\d+\.\s*|\s*視聴済み|\s*教科書\d+(-\d+)?P|\s*\d+問|\s*\d+:\d+/g,
-      '', // Replace with an empty string
-    );
+    const title = element
+      .querySelector('div div div span:nth-child(2)')
+      .textContent.trim();
     // Check if the video has been watched.
     const passed = element.textContent.includes('視聴済み') ? true : false;
     const type = element.textContent.includes('movie-rounded-plus')
