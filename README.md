@@ -10,6 +10,11 @@ the author or copyright owner shall not be liable for any claims, damages or oth
 
 In no event shall the author or copyright holder be liable for any claims, damages, or other liability, whether in contract, tort, or otherwise, arising out of or in connection with the use of this software or any other dealings
 
+## Supported Browsers
+
+- Chrome
+- Bing
+
 ## Nyobikou To whom it may concern
 
 This application does not interfere with Nyobikou's servers in any way.
