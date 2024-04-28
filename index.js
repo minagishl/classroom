@@ -130,18 +130,13 @@ function getList() {
 
 function moveElement(number) {
   // Please update in due course.
-  const xpath = `/html/body/div[2]/div/div[2]/div[2]/main/div[2]/div/div[1]/ul/li[${number}]/div`;
-  const element = document.evaluate(
-    xpath,
-    document,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null,
-  ).singleNodeValue;
+  const element = document.querySelector(
+    `ul[aria-label="必修教材リスト"] li:nth-child(${number}) div`,
+  );
 
   if (!element) {
     // Outputs an error if it does not exist
-    throw new Error('Error: cannot find an element with XPath(' + xpath + ')');
+    throw new Error(`Error: cannot find an element with number ${number}`);
   }
 
   // Dispatches a click event
