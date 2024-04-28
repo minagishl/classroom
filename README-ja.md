@@ -13,7 +13,7 @@ English version is [here](README.md)
 ## 動作確認済みブラウザ
 
 - Chrome
-- Bing
+- Edge
 
 ## N予備校 関係者の方へ
 
@@ -37,9 +37,18 @@ yarn build
 
 ## 使い方
 
+### Chrome
 1. このリポジトリをクローンします
 2. Chromeを開き、`chrome://extensions/`に移動します
 3. 開発者モードを有効にします
 4. `パッケージ化されていない拡張機能を読み込む`をクリックします
+5. このリポジトリをクローンしたディレクトリを選択します
+6. [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) に移動してお楽しみください！
+
+### Edge
+1. このリポジトリをクローンします
+2. Chromeを開き、`edge://extensions/`に移動します
+3. 開発者モードを有効にします
+4. `展開して読み込む`をクリックします
 5. このリポジトリをクローンしたディレクトリを選択します
 6. [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) に移動してお楽しみください！
