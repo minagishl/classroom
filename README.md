@@ -13,7 +13,7 @@ In no event shall the author or copyright holder be liable for any claims, damag
 ## Supported Browsers
 
 - Chrome
-- Bing
+- Edge
 
 ## Nyobikou To whom it may concern
 
@@ -47,9 +47,18 @@ yarn build
 
 ## Usage
 
+### Chrome
 1. Clone this repository
 2. Open Chrome and go to `chrome://extensions/`
 3. Enable Developer mode
 4. Click on `Load unpacked`
 5. Select the directory where you cloned this repository
 6. Go to [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) and enjoy!
+
+### Edge
+1. clone this repository
+2. Open Chrome and go to `edge://extensions/`
+3. Enable developer mode
+4. Click `Expand and Load`
+5. Select the directory where you cloned this repository
+6. go to [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) and enjoy!
