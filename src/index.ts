@@ -24,6 +24,7 @@ function toggleExtension(): void {
     void browser.storage.local.set({ enabled: true });
   } else if (isEnabled) {
     logger.info('Extension is enabled.');
+    observer.observe(targetNode, config);
   } else {
     logger.info('Extension is disabled.');
   }
@@ -51,6 +52,7 @@ function handleVideoEnd(): void {
     const index = findIndex(list);
     if (index !== -1) {
       logger.info('Moving to the next video.');
+      observer.observe(targetNode, config);
       moveElement(index + 1);
     } else {
       logger.info('All videos have been completed.');
