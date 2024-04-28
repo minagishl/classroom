@@ -102,60 +102,28 @@ function findIndex(data) {
 }
 
 function getList() {
-  const xpath = '/html/body/div[2]/div/div[2]/div[2]/main/div[2]/div/div[1]/ul';
-  const element = document.evaluate(
-    xpath,
-    document,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null,
-  ).singleNodeValue;
+  const element = Array.from(
+    document.querySelector('ul[aria-label="必修教材リスト"]').childNodes,
+  );
 
   if (!element) {
     // Outputs an error if it does not exist
     throw new Error('Error: cannot find an element with XPath(' + xpath + ')');
   }
 
-  const list = [];
-  for (let i = 1; i <= element.children.length; i++) {
-    const xpath = `/html/body/div[2]/div/div[2]/div[2]/main/div[2]/div/div[1]/ul/li[${i}]/div/div/div[1]`;
-    const element = document.evaluate(
-      xpath,
-      document,
-      null,
-      XPathResult.FIRST_ORDERED_NODE_TYPE,
-      null,
-    ).singleNodeValue;
-
-    const iconXpath = `/html/body/div[2]/div/div[2]/div[2]/main/div[2]/div/div[1]/ul/li[${i}]/div/div/div[1]/div[1]/div//i`;
-
-    let iconElement = document.evaluate(
-      iconXpath,
-      document,
-      null,
-      XPathResult.FIRST_ORDERED_NODE_TYPE,
-      null,
-    ).singleNodeValue;
-
-    if (!element) {
-      // Outputs an error if it does not exist
-      throw new Error(
-        'Error: cannot find an element with XPath(' + xpath + ')',
-      );
-    }
-
-    if (iconElement instanceof Element) {
-      const type =
-        iconElement.getAttribute('type') === 'movie-rounded-plus'
-          ? 'supplement'
-          : 'main';
-      const passed =
-        iconElement.style.color === 'rgb(0, 197, 65)' ? true : false;
-      list.push({ title: element.textContent.trim(), type, passed });
-    } else {
-      console.error('iconElement is not an HTML Element');
-    }
-  }
+  const list = element.map((element) => {
+    const title = element.textContent.trim().replace(
+      // Clean up the title.
+      /^\d+\.\s*|\s*視聴済み|\s*教科書\d+(-\d+)?P|\s*\d+問|\s*\d+:\d+/g,
+      '', // Replace with an empty string
+    );
+    // Check if the video has been watched.
+    const passed = element.textContent.includes('視聴済み') ? true : false;
+    const type = element.textContent.includes('movie-rounded-plus')
+      ? 'supplement'
+      : 'main';
+    return { title, passed, type };
+  });
 
   return list;
 }
