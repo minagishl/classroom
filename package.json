@@ -2,8 +2,15 @@
   "name": "n-yobikou-video-autoplay-chrome-extension",
   "version": "1.2.0",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
-    "format": "prettier --write ."
+    "build": "rimraf dist && node scripts/build.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check 'src/**/*.ts'",
+    "format:write": "prettier --write 'src/**/*.ts'",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -17,6 +24,19 @@
   "homepage": "https://github.com/minagishl/n-yobikou-video-autoplay-chrome-extension#readme",
   "description": "This is a Chrome extension that automatically plays N Prep School videos",
   "devDependencies": {
-    "prettier": "^3.2.5"
+    "@types/chrome": "^0.0.267",
+    "@types/webextension-polyfill": "^0.10.7",
+    "@typescript-eslint/eslint-plugin": "^7.7.1",
+    "esbuild": "^0.20.2",
+    "eslint": "^8",
+    "eslint-config-love": "^47.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^17.3.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "prettier": "^3.2.5",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.4.5",
+    "webextension-polyfill": "^0.11.0"
   }
 }

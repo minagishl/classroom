@@ -20,6 +20,18 @@ There is a reason for this, and it's because the official accounts on YouTube an
 
 -->
 
+## Build
+
+Install the package before building.
+```bash
+yarn install
+```
+
+Build the extension.
+```bash
+yarn build
+```
+
 ## Usage
 
 1. Clone this repository
