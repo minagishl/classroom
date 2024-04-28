@@ -65,10 +65,7 @@ function handleVideoEnd(): void {
   }
 }
 
-const callback: MutationCallback = function (
-  mutationsList: MutationRecord[],
-  _: MutationObserver,
-) {
+const callback: MutationCallback = function (mutationsList: MutationRecord[]) {
   for (const mutation of mutationsList) {
     if (mutation.type === 'childList') {
       if (
