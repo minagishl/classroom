@@ -2,6 +2,9 @@ import browser from 'webextension-polyfill';
 import logger from 'logger';
 
 logger.info('Extension loaded.');
+logger.info(
+  'Please star the repository if you like!\nhttps://github.com/minagishl/n-prep-school-auto-play-extension',
+);
 
 const targetNode = document.body;
 let lastExecutionTime = 0;
