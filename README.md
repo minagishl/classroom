@@ -4,6 +4,8 @@ Japanese version is [here](README-ja.md)
 
 ## Overview
 
+> I tried to install it in FireFox, but I got an error and could not proceed, so please do your own research and do it yourself.
+
 the author or copyright owner shall not be liable for any claims, damages or other liability, whether in an action of contract or otherwise.
 
 In no event shall the author or copyright holder be liable for any claims, damages, or other liability, whether in contract, tort, or otherwise, arising out of or in connection with the use of this software or any other dealings
