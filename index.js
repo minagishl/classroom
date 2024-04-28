@@ -107,8 +107,7 @@ function getList() {
   );
 
   if (!element) {
-    // Outputs an error if it does not exist
-    throw new Error('Error: cannot find an element with XPath(' + xpath + ')');
+    throw new Error('Error: cannot find an element');
   }
 
   const list = element.map((element) => {
@@ -133,8 +132,7 @@ function moveElement(number) {
   );
 
   if (!element) {
-    // Outputs an error if it does not exist
-    throw new Error(`Error: cannot find an element with number ${number}`);
+    throw new Error(`Error: cannot find an element with the number ${number}`);
   }
 
   // Dispatches a click event
