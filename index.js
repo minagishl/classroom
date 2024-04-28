@@ -81,23 +81,12 @@ const observer = new MutationObserver(callback);
 observer.observe(targetNode, config);
 
 function getVideoPlayer() {
-  const iframeElement = document.evaluate(
-    '/html/body/div[9]/div/div/iframe',
-    document,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null,
-  ).singleNodeValue;
-  const iframeDocument =
-    iframeElement?.contentDocument ?? iframeElement?.contentWindow.document;
-
   try {
-    return (
-      iframeDocument.querySelector('#video-player') ??
-      iframeDocument.querySelector('video') ??
-      iframeDocument.getElementById('video-player') ??
-      iframeDocument.getElementsByTagName('video')[0]
-    );
+    const iframeElement = document.querySelector('iframe[title="教材"]');
+    const iframeDocument =
+      iframeElement.contentDocument ?? iframeElement.contentWindow.document;
+
+    return iframeDocument.querySelector('#video-player');
   } catch (error) {
     return null;
   }
