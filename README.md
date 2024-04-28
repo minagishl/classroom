@@ -1,5 +1,7 @@
 # N Prep School Auto Play Extension
 
+Japanese version is [here](README-ja.md)
+
 ## Overview
 
 the author or copyright owner shall not be liable for any claims, damages or other liability, whether in an action of contract or otherwise.
