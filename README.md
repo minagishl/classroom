@@ -1,4 +1,4 @@
-# n-yobikou-video-autoplay-chrome-extension
+# N Prep School Auto Play Extension
 
 ## Overview
 
@@ -18,16 +18,20 @@ When I add this code, the name of the extension is “N Prep School Auto Play”
 
 There is a reason for this, and it's because the official accounts on YouTube and other sites use that name, but I didn't like it myself, so I changed the name of the extension!
 
+2024/04/29 - Added - decided to unify names
+
 -->
 
 ## Build
 
 Install the package before building.
+
 ```bash
 yarn install
 ```
 
 Build the extension.
+
 ```bash
 yarn build
 ```
