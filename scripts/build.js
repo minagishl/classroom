@@ -34,6 +34,7 @@ const config = {
     manifest.background = {
       scripts: ['background.js'],
     };
+    delete manifest.content_scripts[0].run_at; // Remove the run_at key
     fs.writeFileSync(
       './dist/firefox/manifest.json',
       JSON.stringify(manifest, null, 2),

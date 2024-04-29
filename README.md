@@ -70,4 +70,6 @@ yarn build
 2. Open Firefox and go to `about:debugging#/runtime/this-firefox`
 3. Click on `Load temporary add-on`
 4. Select `dist/firefox.zip` in the directory where you cloned this repository
-5. Go to [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) and enjoy!
+5. Go to `about:addons` and open extension management
+6. Enable `https://www.nnn.ed.nico access to stored data
+7. Go to [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) and enjoy!

@@ -60,4 +60,6 @@ yarn build
 2. Firefoxを開き、`about:debugging#/runtime/this-firefox`に移動します
 3. `一時的なアドオンを読み込む`をクリックします
 4. このリポジトリをクローンしたディレクトリの`dist/firefox.zip`を選択します
-5. [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) に移動してお楽しみください！
+5. `about:addons` に移動し、拡張機能の管理を開きます
+6. `https://www.nnn.ed.nico の保存されたデータへのアクセス` を有効にします
+7. [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) に移動してお楽しみください！
