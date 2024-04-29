@@ -79,11 +79,16 @@ const config = {
     });
 
     // finalize the archive (ie we are done appending files but streams have to finish yet)
-    archive.finalize().then(() => {
-      fs.rm('./dist/firefox', { recursive: true }, (err) => {
-        if (err) throw err;
+    archive
+      .finalize()
+      .then(() => {
+        fs.rm('./dist/firefox', { recursive: true }, (err) => {
+          if (err) throw err;
+        });
+      })
+      .catch((err) => {
+        throw err;
       });
-    });
   } catch (err) {
     console.error(err);
   }
