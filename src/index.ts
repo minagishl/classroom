@@ -12,10 +12,15 @@ let lastVideoPlayerTime = 0;
 let lastVideoPlayer = false;
 let completed = false;
 
-void browser.storage.local.get('enabled').then((data) => {
-  isEnabled = data.enabled === true;
-  toggleExtension();
-});
+void browser.storage.local
+  .get('enabled')
+  .then((data) => {
+    isEnabled = data.enabled === true;
+    toggleExtension();
+  })
+  .catch((error) => {
+    logger.error(error);
+  });
 
 function toggleExtension(): void {
   if (isEnabled === undefined) {
