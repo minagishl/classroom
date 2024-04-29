@@ -4,8 +4,6 @@ English version is [here](README.md)
 
 ## 概要
 
-> FireFox への導入も試しましたが、エラーが出て進めないのでご自身で調べて行なってください
-
 著作者または著作権者は、契約の違反行為その他の責任について、いかなる請求、損害その他の責任についても責任を負いません。
 
 著作者または著作権者は、このソフトウェアの使用またはその他の取引に起因する、契約、不法行為その他のいかなる請求、損害その他の責任についても責任を負いません
@@ -14,6 +12,7 @@ English version is [here](README.md)
 
 - Chrome
 - Edge
+- Firefox
 
 ## N予備校 関係者の方へ
 
@@ -38,6 +37,7 @@ yarn build
 ## 使い方
 
 ### Chrome
+
 1. このリポジトリをクローンします
 2. Chromeを開き、`chrome://extensions/`に移動します
 3. 開発者モードを有効にします
@@ -46,9 +46,18 @@ yarn build
 6. [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) に移動してお楽しみください！
 
 ### Edge
+
 1. このリポジトリをクローンします
 2. Chromeを開き、`edge://extensions/`に移動します
 3. 開発者モードを有効にします
 4. `展開して読み込む`をクリックします
 5. このリポジトリをクローンしたディレクトリを選択します
 6. [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) に移動してお楽しみください！
+
+### Firefox
+
+1. このリポジトリをクローンします
+2. Firefoxを開き、`about:debugging#/runtime/this-firefox`に移動します
+3. `一時的なアドオンを読み込む`をクリックします
+4. このリポジトリをクローンしたディレクトリの`dist/firefox.zip`を選択します
+5. [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) に移動してお楽しみください！

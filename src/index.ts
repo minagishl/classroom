@@ -55,7 +55,6 @@ function handleVideoEnd(): void {
     const index = findIndex(list);
     if (index !== -1) {
       logger.info('Moving to the next video.');
-      observer.observe(targetNode, config);
       moveElement(index + 1);
     } else {
       logger.info('All videos have been completed.');
@@ -74,7 +73,6 @@ const callback: MutationCallback = function (mutationsList: MutationRecord[]) {
         const videoPlayer: HTMLVideoElement | null | undefined =
           getVideoPlayer();
         if (typeof videoPlayer !== 'undefined' && videoPlayer !== null) {
-          observer.disconnect();
           logger.info('Video player found.');
           if (videoPlayer.ended) {
             handleVideoEnd();

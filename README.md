@@ -4,8 +4,6 @@ Japanese version is [here](README-ja.md)
 
 ## Overview
 
-> I tried to install it in FireFox, but I got an error and could not proceed, so please do your own research and do it yourself.
-
 the author or copyright owner shall not be liable for any claims, damages or other liability, whether in an action of contract or otherwise.
 
 In no event shall the author or copyright holder be liable for any claims, damages, or other liability, whether in contract, tort, or otherwise, arising out of or in connection with the use of this software or any other dealings
@@ -14,6 +12,7 @@ In no event shall the author or copyright holder be liable for any claims, damag
 
 - Chrome
 - Edge
+- Firefox
 
 ## Nyobikou To whom it may concern
 
@@ -48,6 +47,7 @@ yarn build
 ## Usage
 
 ### Chrome
+
 1. Clone this repository
 2. Open Chrome and go to `chrome://extensions/`
 3. Enable Developer mode
@@ -56,9 +56,18 @@ yarn build
 6. Go to [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) and enjoy!
 
 ### Edge
+
 1. clone this repository
 2. Open Chrome and go to `edge://extensions/`
 3. Enable developer mode
 4. Click `Expand and Load`
 5. Select the directory where you cloned this repository
 6. go to [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) and enjoy!
+
+### Firefox
+
+1. Clone this repository
+2. Open Firefox and go to `about:debugging#/runtime/this-firefox`
+3. Click on `Load temporary add-on`
+4. Select `dist/firefox.zip` in the directory where you cloned this repository
+5. Go to [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) and enjoy!

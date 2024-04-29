@@ -5,11 +5,6 @@
   "description": "This is a Chrome extension that automatically plays N Prep School videos",
   "author": "minagishl@icloud.com",
   "permissions": ["contextMenus", "storage"],
-    "applications": {
-    "gecko": {
-      "id": "com.minagishl.n-prep-school-auto-play"
-    }
-  },
   "background": {
     "service_worker": "background.js"
   },
