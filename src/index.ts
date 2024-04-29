@@ -6,31 +6,30 @@ logger.info(
   'Please star the repository if you like!\nhttps://github.com/minagishl/n-prep-school-auto-play-extension',
 );
 
-let isEnabled = true;
+let isEnabled: boolean;
 let lastExecutionTime = 0;
 let lastVideoPlayerTime = 0;
 let lastVideoPlayer = false;
 let completed = false;
 
-void browser.storage.local
-  .get('enabled')
-  .then((data) => {
-    isEnabled = data.enabled === true;
-    toggleExtension();
-  })
-  .catch((error) => {
-    logger.error(error);
-  });
+async function updateIsEnabled(): Promise<void> {
+  const data = await browser.storage.local.get('enabled');
+  isEnabled = data.enabled !== undefined ? data.enabled : true;
+  if (isEnabled) {
+    await browser.storage.local.set({ enabled: true });
+  }
+  toggleExtension();
+}
 
 function toggleExtension(): void {
-  if (isEnabled === undefined) {
-    void browser.storage.local.set({ enabled: true });
-  } else if (isEnabled) {
+  if (isEnabled) {
     logger.info('Extension is enabled.');
   } else {
     logger.info('Extension is disabled.');
   }
 }
+
+void updateIsEnabled();
 
 browser.storage.onChanged.addListener((changes) => {
   if (changes.enabled !== undefined) {
