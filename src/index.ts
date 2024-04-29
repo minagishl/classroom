@@ -13,6 +13,7 @@ let isValidPath: boolean | undefined;
 let lastExecutionTime = 0;
 let lastVideoPlayerTime = 0;
 let lastVideoPlayer = false;
+let lastbackgroundAutoPlay = false;
 let videoPlayer: HTMLVideoElement | undefined | null = null;
 let completed = false;
 
@@ -69,6 +70,18 @@ function handleVideoEnd(): void {
     }
     lastExecutionTime = currentTime;
 
+    // return if background playback is in the background and backgroundAutoPlay is false
+    if (document.hidden && !backgroundAutoPlay) {
+      // Once output, do not output again
+      if (!lastbackgroundAutoPlay)
+        logger.info('Did not move because it was playing in the background');
+      lastbackgroundAutoPlay = true;
+      return;
+    } else if (document.hidden && backgroundAutoPlay) {
+      logger.info('Playback proceeds in the background');
+    }
+
+    lastbackgroundAutoPlay = false;
     logger.info('Video ended.');
     const list = getList();
     const index = findIndex(list);
@@ -190,14 +203,6 @@ function getList(): Array<{ title: string; passed: boolean; type: string }> {
 }
 
 function moveElement(number: number): void {
-  // return if background playback is in the background and backgroundAutoPlay is false
-  if (document.hidden && !backgroundAutoPlay) {
-    logger.info('Did not move because it was playing in the background');
-    return;
-  } else if (document.hidden && backgroundAutoPlay) {
-    logger.info('Playback proceeds in the background');
-  }
-
   const element = document.querySelector(
     `ul[aria-label="必修教材リスト"] li:nth-child(${number}) div`,
   );
