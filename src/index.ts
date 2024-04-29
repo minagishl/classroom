@@ -10,6 +10,7 @@ let isEnabled: boolean;
 let lastExecutionTime = 0;
 let lastVideoPlayerTime = 0;
 let lastVideoPlayer = false;
+let videoPlayer: HTMLVideoElement | undefined | null = null;
 let completed = false;
 
 async function updateIsEnabled(): Promise<void> {
@@ -98,16 +99,31 @@ setInterval(function () {
 
 function getVideoPlayer(): HTMLVideoElement | null {
   try {
-    const iframeElement: HTMLIFrameElement | null =
-      document.querySelector('iframe[title="教材"]');
-    const iframeDocument =
-      iframeElement?.contentDocument ?? iframeElement?.contentWindow?.document;
+    if (videoPlayer === null || videoPlayer === undefined) {
+      const iframeElement: HTMLIFrameElement | null =
+        document.querySelector('iframe[title="教材"]');
+      const iframeDocument =
+        iframeElement?.contentDocument ??
+        iframeElement?.contentWindow?.document;
 
-    return iframeDocument?.querySelector('#video-player') ?? null;
+      videoPlayer = iframeDocument?.querySelector('video');
+      return videoPlayer ?? null;
+    } else {
+      return videoPlayer;
+    }
   } catch (error) {
     return null;
   }
 }
+
+// Create MutationObserver to monitor DOM changes
+const observer = new MutationObserver(() => {
+  // Reset videoPlayer to null when the DOM changes
+  videoPlayer = null;
+});
+
+// Start monitoring changes in child and descendant nodes of the body element
+observer.observe(document.body, { childList: true, subtree: true });
 
 function findIndex(
   data: Array<{ title: string; passed: boolean; type: string }>,
