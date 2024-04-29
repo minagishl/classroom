@@ -6,16 +6,11 @@ logger.info(
   'Please star the repository if you like!\nhttps://github.com/minagishl/n-prep-school-auto-play-extension',
 );
 
-const targetNode = document.body;
-let lastExecutionTime = 0;
-
-const config = {
-  childList: true,
-  attributes: true,
-  subtree: true,
-};
-
 let isEnabled = true;
+let lastExecutionTime = 0;
+let lastVideoPlayerTime = 0;
+let lastVideoPlayer = false;
+let completed = false;
 
 void browser.storage.local.get('enabled').then((data) => {
   isEnabled = data.enabled === true;
@@ -27,7 +22,6 @@ function toggleExtension(): void {
     void browser.storage.local.set({ enabled: true });
   } else if (isEnabled) {
     logger.info('Extension is enabled.');
-    observer.observe(targetNode, config);
   } else {
     logger.info('Extension is disabled.');
   }
@@ -57,40 +51,46 @@ function handleVideoEnd(): void {
       logger.info('Moving to the next video.');
       moveElement(index + 1);
     } else {
-      logger.info('All videos have been completed.');
+      if (!completed) {
+        completed = true;
+        window.alert('All videos have been completed.');
+
+        logger.info('All videos have been completed.');
+        logger.info('Move to chapter after 3 seconds...');
+
+        setTimeout(() => {
+          const url = new URL(window.location.href);
+          const course = url.pathname.split('/')[2];
+          const chapter = url.pathname.split('/')[4];
+          window.location.href = `/courses/${course}/chapters/${chapter}`;
+        }, 3000);
+      }
     }
   } else {
     logger.info('Extensions were not executed because they are disabled');
   }
 }
-
-const callback: MutationCallback = function (mutationsList: MutationRecord[]) {
-  for (const mutation of mutationsList) {
-    if (mutation.type === 'childList') {
-      if (
-        /\/courses\/\w+\/chapters\/\w+\/movie/.test(window.location.pathname)
-      ) {
-        const videoPlayer: HTMLVideoElement | null | undefined =
-          getVideoPlayer();
-        if (typeof videoPlayer !== 'undefined' && videoPlayer !== null) {
-          logger.info('Video player found.');
-          if (videoPlayer.ended) {
-            handleVideoEnd();
-          } else {
-            videoPlayer.addEventListener('ended', () => {
-              handleVideoEnd();
-            });
-          }
-        } else {
-          logger.info('Video player not found.');
-        }
+setInterval(function () {
+  if (/\/courses\/\w+\/chapters\/\w+\/movie/.test(window.location.pathname)) {
+    const videoPlayer: HTMLVideoElement | null | undefined = getVideoPlayer();
+    if (typeof videoPlayer !== 'undefined' && videoPlayer !== null) {
+      if (!lastVideoPlayer) logger.info('Video player found.');
+      lastVideoPlayer = true;
+      if (videoPlayer.ended) {
+        handleVideoEnd();
+      } else {
+        videoPlayer.addEventListener('ended', () => {
+          handleVideoEnd();
+        });
+      }
+    } else {
+      if (Date.now() - lastVideoPlayerTime > 10000) {
+        logger.info('Video player not found.');
+        lastVideoPlayerTime = Date.now();
       }
     }
   }
-};
-
-const observer: MutationObserver = new MutationObserver(callback);
-observer.observe(targetNode, config);
+}, 1000);
 
 function getVideoPlayer(): HTMLVideoElement | null {
   try {
