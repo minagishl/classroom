@@ -1,11 +1,13 @@
 import browser from 'webextension-polyfill';
 import logger from 'logger';
 
+// Show in log when extension is loaded
 logger.info('Extension loaded.');
 logger.info(
   'Please star the repository if you like!\nhttps://github.com/minagishl/n-prep-school-auto-play-extension',
 );
 
+// Flags to be used in the code, etc.
 let isEnabled: boolean;
 let isValidPath: boolean | undefined;
 let lastExecutionTime = 0;
@@ -13,6 +15,14 @@ let lastVideoPlayerTime = 0;
 let lastVideoPlayer = false;
 let videoPlayer: HTMLVideoElement | undefined | null = null;
 let completed = false;
+
+// Changing this value allows background playback
+// Just not recommended from a moral standpoint.
+const backgroundAutoPlay = false;
+
+if (backgroundAutoPlay) {
+  logger.info('Background playback is enabled.');
+}
 
 async function updateIsEnabled(): Promise<void> {
   const data = await browser.storage.local.get('enabled');
@@ -39,6 +49,7 @@ function getIsValidPath(): boolean {
   return isValidPath;
 }
 
+// Execute the function when the page is loaded
 void updateIsEnabled();
 
 browser.storage.onChanged.addListener((changes) => {
@@ -179,7 +190,14 @@ function getList(): Array<{ title: string; passed: boolean; type: string }> {
 }
 
 function moveElement(number: number): void {
-  // Please update in due course.
+  // return if background playback is in the background and backgroundAutoPlay is false
+  if (document.hidden && !backgroundAutoPlay) {
+    logger.info('Did not move because it was playing in the background');
+    return;
+  } else if (document.hidden && backgroundAutoPlay) {
+    logger.info('Playback proceeds in the background');
+  }
+
   const element = document.querySelector(
     `ul[aria-label="必修教材リスト"] li:nth-child(${number}) div`,
   );
@@ -188,7 +206,6 @@ function moveElement(number: number): void {
     throw new Error(`Error: cannot find an element with the number ${number}`);
   }
 
-  // Dispatches a click event
   const event = new MouseEvent('click', {
     bubbles: true,
     cancelable: true,
