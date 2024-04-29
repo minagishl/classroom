@@ -12,8 +12,8 @@ let isEnabled: boolean;
 let isValidPath: boolean | undefined;
 let lastExecutionTime = 0;
 let lastVideoPlayerTime = 0;
-let lastVideoPlayer = false;
-let lastbackgroundAutoPlay = false;
+let previousVideoPlayer = false;
+let previousBackgroundAutoPlay = false;
 let videoPlayer: HTMLVideoElement | undefined | null = null;
 let completed = false;
 
@@ -73,15 +73,15 @@ function handleVideoEnd(): void {
     // return if background playback is in the background and backgroundAutoPlay is false
     if (document.hidden && !backgroundAutoPlay) {
       // Once output, do not output again
-      if (!lastbackgroundAutoPlay)
+      if (!previousBackgroundAutoPlay)
         logger.info('Did not move because it was playing in the background');
-      lastbackgroundAutoPlay = true;
+      previousBackgroundAutoPlay = true;
       return;
     } else if (document.hidden && backgroundAutoPlay) {
       logger.info('Playback proceeds in the background');
     }
 
-    lastbackgroundAutoPlay = false;
+    previousBackgroundAutoPlay = false;
     logger.info('Video ended.');
     const list = getList();
     const index = findIndex(list);
@@ -112,8 +112,8 @@ setInterval(function () {
   if (getIsValidPath()) {
     const videoPlayer: HTMLVideoElement | null | undefined = getVideoPlayer();
     if (typeof videoPlayer !== 'undefined' && videoPlayer !== null) {
-      if (!lastVideoPlayer) logger.info('Video player found.');
-      lastVideoPlayer = true;
+      if (!previousVideoPlayer) logger.info('Video player found.');
+      previousVideoPlayer = true;
       if (videoPlayer.ended) {
         handleVideoEnd();
       } else {
