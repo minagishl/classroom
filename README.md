@@ -32,6 +32,8 @@ There is a reason for this, and it's because the official accounts on YouTube an
 
 2024/04/29 - Added - decided to unify names
 
+2024/02/30 - But I didn't see anything in the rules about automation, is that OK? https://www.nnn.ed.nico/rules
+
 -->
 
 ## Build
