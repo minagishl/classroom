@@ -7,6 +7,7 @@ logger.info(
 );
 
 let isEnabled: boolean;
+let isValidPath: boolean | undefined;
 let lastExecutionTime = 0;
 let lastVideoPlayerTime = 0;
 let lastVideoPlayer = false;
@@ -28,6 +29,14 @@ function toggleExtension(): void {
   } else {
     logger.info('Extension is disabled.');
   }
+}
+
+function getIsValidPath(): boolean {
+  if (isValidPath === undefined) {
+    const url = new URL(window.location.href);
+    isValidPath = /\/courses\/\w+\/chapters\/\w+\/movie/.test(url.pathname);
+  }
+  return isValidPath;
 }
 
 void updateIsEnabled();
@@ -76,7 +85,7 @@ function handleVideoEnd(): void {
   }
 }
 setInterval(function () {
-  if (/\/courses\/\w+\/chapters\/\w+\/movie/.test(window.location.pathname)) {
+  if (getIsValidPath()) {
     const videoPlayer: HTMLVideoElement | null | undefined = getVideoPlayer();
     if (typeof videoPlayer !== 'undefined' && videoPlayer !== null) {
       if (!lastVideoPlayer) logger.info('Video player found.');
@@ -118,8 +127,8 @@ function getVideoPlayer(): HTMLVideoElement | null {
 
 // Create MutationObserver to monitor DOM changes
 const observer = new MutationObserver(() => {
-  // Reset videoPlayer to null when the DOM changes
   videoPlayer = null;
+  isValidPath = undefined;
 });
 
 // Start monitoring changes in child and descendant nodes of the body element
