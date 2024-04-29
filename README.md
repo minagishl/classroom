@@ -8,6 +8,10 @@ the author or copyright owner shall not be liable for any claims, damages or oth
 
 In no event shall the author or copyright holder be liable for any claims, damages, or other liability, whether in contract, tort, or otherwise, arising out of or in connection with the use of this software or any other dealings
 
+## Notice
+
+This application supports full background playback by editing a flag in the internal code, but this may violate N Prep's Terms of Use, so please use at your own risk.
+
 ## Supported Browsers
 
 - Chrome
