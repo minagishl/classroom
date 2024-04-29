@@ -150,10 +150,6 @@ function getList(): Array<{ title: string; passed: boolean; type: string }> {
     document.querySelector('ul[aria-label="必修教材リスト"]')?.childNodes ?? [],
   ) as HTMLElement[];
 
-  if (element === null) {
-    throw new Error('Error: cannot find an element');
-  }
-
   const list = Array.from(element).map((element) => {
     // Get the title (though it's not particularly useful)
     const titleElement = element.querySelector(
@@ -172,7 +168,7 @@ function getList(): Array<{ title: string; passed: boolean; type: string }> {
 
     // Confirmation of availability of preliminary and required materials
     const type =
-      iconElement.getAttribute('type') === 'movie-rounded-plus'
+      iconElement?.getAttribute('type') === 'movie-rounded-plus'
         ? 'supplement'
         : 'main';
 
