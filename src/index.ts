@@ -17,11 +17,15 @@ let previousBackgroundAutoPlay = false;
 let videoPlayer: HTMLVideoElement | undefined | null = null;
 let completed = false;
 
+// Specify the value to be detected
+const RGB_COLOR_GREEN = 'rgb(0, 197, 65)';
+const TYPE_MOVIE_ROUNDED_PLUS = 'movie-rounded-plus';
+
 // Changing this value allows background playback
 // Just not recommended from a moral standpoint.
-const backgroundAutoPlay = false;
+const BACKGROUND_AUTO_PLAY = false;
 
-if (backgroundAutoPlay) {
+if (BACKGROUND_AUTO_PLAY) {
   logger.info('Background playback is enabled.');
 }
 
@@ -71,13 +75,13 @@ function handleVideoEnd(): void {
     lastExecutionTime = currentTime;
 
     // return if background playback is in the background and backgroundAutoPlay is false
-    if (document.hidden && !backgroundAutoPlay) {
+    if (document.hidden && !BACKGROUND_AUTO_PLAY) {
       // Once output, do not output again
       if (!previousBackgroundAutoPlay)
         logger.info('Did not move because it was playing in the background');
       previousBackgroundAutoPlay = true;
       return;
-    } else if (document.hidden && backgroundAutoPlay) {
+    } else if (document.hidden && BACKGROUND_AUTO_PLAY) {
       logger.info('Playback proceeds in the background');
     }
 
@@ -187,12 +191,12 @@ function getList(): Array<{ title: string; passed: boolean; type: string }> {
     ) as unknown as HTMLElement;
     const passed =
       // Countermeasure to delay icon color in case of DOM construction.
-      iconElement.style.color === 'rgb(0, 197, 65)' ||
+      iconElement.style.color === RGB_COLOR_GREEN ||
       element.textContent?.includes('視聴済み') === true;
 
     // Confirmation of availability of preliminary and required materials
     const type =
-      iconElement?.getAttribute('type') === 'movie-rounded-plus'
+      iconElement?.getAttribute('type') === TYPE_MOVIE_ROUNDED_PLUS
         ? 'supplement'
         : 'main';
 
