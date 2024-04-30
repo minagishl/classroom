@@ -99,7 +99,7 @@ function handleVideoEnd(): void {
         window.alert('All videos have been completed.');
 
         logger.info('All videos have been completed.');
-        logger.info('Move to chapter after 3 seconds...');
+        logger.info(`Move to chapter after ${REDIRECT_TIME / 1000} seconds...`);
 
         setTimeout(() => {
           const url = new URL(window.location.href);
