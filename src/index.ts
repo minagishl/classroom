@@ -20,6 +20,8 @@ let completed = false;
 // Specify the value to be detected
 const RGB_COLOR_GREEN = 'rgb(0, 197, 65)';
 const TYPE_MOVIE_ROUNDED_PLUS = 'movie-rounded-plus';
+const REDIRECT_TIME = 3000;
+const COOL_TIME = 5000;
 
 // Changing this value allows background playback
 // Just not recommended from a moral standpoint.
@@ -68,8 +70,7 @@ browser.storage.onChanged.addListener((changes) => {
 function handleVideoEnd(): void {
   if (isEnabled) {
     const currentTime = Date.now();
-    if (currentTime - lastExecutionTime < 2500) {
-      // Exit without executing the function if it is within 2500 ms since the last execution.
+    if (currentTime - lastExecutionTime < COOL_TIME) {
       return;
     }
     lastExecutionTime = currentTime;
@@ -105,7 +106,7 @@ function handleVideoEnd(): void {
           const course = url.pathname.split('/')[2];
           const chapter = url.pathname.split('/')[4];
           window.location.href = `/courses/${course}/chapters/${chapter}`;
-        }, 3000);
+        }, REDIRECT_TIME);
       }
     }
   } else {
@@ -126,7 +127,7 @@ setInterval(function () {
         });
       }
     } else {
-      if (Date.now() - lastVideoPlayerTime > 10000) {
+      if (Date.now() - lastVideoPlayerTime > COOL_TIME) {
         logger.info('Video player not found.');
         lastVideoPlayerTime = Date.now();
       }
