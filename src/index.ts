@@ -113,6 +113,9 @@ function handleVideoEnd(): void {
     logger.info('Extensions were not executed because they are disabled');
   }
 }
+
+// Reason for this code: It could be a code that looks for it when rendering the DOM,
+// But sometimes it fails, so this code is used.
 setInterval(function () {
   if (getIsValidPath()) {
     const videoPlayer: HTMLMediaElement | null | undefined = getVideoPlayer();
