@@ -14,7 +14,7 @@ let lastExecutionTime = 0;
 let lastVideoPlayerTime = 0;
 let previousVideoPlayer = false;
 let previousBackgroundAutoPlay = false;
-let videoPlayer: HTMLVideoElement | undefined | null = null;
+let videoPlayer: HTMLMediaElement | undefined | null = null;
 let completed = false;
 
 // Specify the value to be detected
@@ -115,7 +115,7 @@ function handleVideoEnd(): void {
 }
 setInterval(function () {
   if (getIsValidPath()) {
-    const videoPlayer: HTMLVideoElement | null | undefined = getVideoPlayer();
+    const videoPlayer: HTMLMediaElement | null | undefined = getVideoPlayer();
     if (typeof videoPlayer !== 'undefined' && videoPlayer !== null) {
       if (!previousVideoPlayer) logger.info('Video player found.');
       previousVideoPlayer = true;
@@ -135,7 +135,7 @@ setInterval(function () {
   }
 }, 1000);
 
-function getVideoPlayer(): HTMLVideoElement | null {
+function getVideoPlayer(): HTMLMediaElement | null {
   try {
     if (videoPlayer === null || videoPlayer === undefined) {
       const iframeElement: HTMLIFrameElement | null =
