@@ -44,20 +44,20 @@ The following process is different for each browser, so please refer to the sect
 
 ### Chrome
 
-1. clone this repository 2.
-   Open Chrome and go to `chrome://extensions/`. 3.
-2. enable developer mode
-3. click `Load unpacked`. 5.
-4. select the directory where you cloned this repository.
-5. go to [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) and enjoy!
+1. clone this repository
+2. Open Chrome and go to `chrome://extensions/`.
+3. enable developer mode
+4. click `Load unpacked`.
+5. select the directory where you cloned this repository.
+6. go to [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) and enjoy!
 
 ### Edge
 
 1. clone this repository.
 2. open Chrome and go to `edge://extensions/`.
 3. enable developer mode.
-4. click `expand and load`. 5.
-5. select the directory where you cloned this repository. 6.
+4. click `expand and load`.
+5. select the directory where you cloned this repository.
 6. go to [https://www.nnn.ed.nico/](https://www.nnn.ed.nico/) and enjoy!
 
 ### Firefox
