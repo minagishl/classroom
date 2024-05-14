@@ -4,8 +4,8 @@ Japanese version is [here](README-en.md)
 
 ## Overview
 
-This extension makes it easier to watch videos on N Prep!
-When a video ends, it automatically moves to the next video.
+This extension makes it easier to watch videos on N Prep!  
+When a video ends, it automatically moves to the next video.  
 You can enable or disable this extension from the right-click menu.
 
 ## Notice
