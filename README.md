@@ -64,7 +64,7 @@ The following process is different for each browser, so please refer to the sect
 
 1. clone this repository
 2. open Firefox and go to `about:debugging#/runtime/this-firefox`.
-3. click `load temporary add-ons
+3. click `load temporary add-ons`
 4. select `dist/firefox.zip` in the directory where you cloned this repository
 5. go to `about:addons` and open the extension management.
 6. enable `https://www.nnn.ed.nico access to stored data`.
