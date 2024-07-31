@@ -1,7 +1,5 @@
 # Collaboration
 
-Japanese version is [here](README-ja.md)
-
 ## Overview
 
 This extension makes it easier to watch videos on N Prep!
