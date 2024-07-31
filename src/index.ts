@@ -4,7 +4,7 @@ import logger from 'logger';
 // Show in log when extension is loaded
 logger.info('Extension loaded.');
 logger.info(
-  'Please star the repository if you like!\nhttps://github.com/minagishl/n-prep-school-auto-play-extension',
+  'Please star the repository if you like!\nhttps://github.com/minagishl/collaboration',
 );
 
 // Flags to be used in the code, etc.
