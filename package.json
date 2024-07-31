@@ -4,8 +4,6 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start:website": "cd website && npm start",
-    "build:website": "cd website && npm run build",
     "build": "rimraf dist && node scripts/build.js",
     "format": "prettier --write .",
     "format:check": "prettier --check 'src/**/*.ts'",
