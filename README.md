@@ -1,6 +1,6 @@
 # Collaboration
 
-Japanese version is [here](README-jp.md)
+Japanese version is [here](README-ja.md)
 
 ## Overview
 
