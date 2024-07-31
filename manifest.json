@@ -1,8 +1,8 @@
 {
-  "name": "N Prep School Auto Play",
+  "name": "Collaboration",
   "version": "1.7.0",
   "manifest_version": 3,
-  "description": "This is a Chrome extension that automatically plays N Prep School videos",
+  "description": "This extension automatically plays videos from school study sites",
   "author": "minagishl@icloud.com",
   "permissions": ["contextMenus", "storage"],
   "background": {
