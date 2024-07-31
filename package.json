@@ -1,5 +1,5 @@
 {
-  "name": "n-prep-school-auto-play-extension",
+  "name": "collaboration",
   "version": "1.7.0",
   "main": "index.js",
   "type": "commonjs",
@@ -14,15 +14,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/minagishl/n-prep-school-auto-play-extension.git"
+    "url": "git+https://github.com/minagishl/collaboration.git"
   },
   "author": "minagishl",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/minagishl/n-prep-school-auto-play-extension/issues"
+    "url": "https://github.com/minagishl/collaboration/issues"
   },
-  "homepage": "https://github.com/minagishl/n-prep-school-auto-play-extension#readme",
-  "description": "This is a Chrome extension that automatically plays N Prep School videos",
+  "homepage": "https://github.com/minagishl/collaboration#readme",
+  "description": "This extension automatically plays videos from school study sites",
   "devDependencies": {
     "@types/chrome": "^0.0.267",
     "@types/webextension-polyfill": "^0.10.7",
