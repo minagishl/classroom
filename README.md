@@ -20,7 +20,7 @@ Also with this extension the author or copyright holder shall not be liable for 
 - Edge
 - Firefox
 
-## For N Prep School Parties
+## To School Officials
 
 This application does not interfere in any way with N Prep School's servers.
 
