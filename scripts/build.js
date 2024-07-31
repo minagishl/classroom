@@ -16,6 +16,13 @@ const config = {
   try {
     await build({ ...config });
 
+    // images folder copy
+    fs.mkdirSync('./dist/images', { recursive: true });
+    const images = fs.readdirSync('./images');
+    images.forEach((image) => {
+      fs.copyFileSync(`./images/${image}`, `./dist/images/${image}`);
+    });
+
     fs.copyFileSync('./manifest.json', './dist/manifest.json');
 
     fs.mkdirSync('./dist/firefox', { recursive: true });
@@ -44,9 +51,16 @@ const config = {
     // Copy all files except manifest.json to firefox
     const files = fs.readdirSync('./dist');
     files.forEach((file) => {
-      if (file !== 'firefox' && file !== 'manifest.json') {
+      if (file !== 'firefox' && file !== 'manifest.json' && file !== 'images') {
         fs.copyFileSync(`./dist/${file}`, `./dist/firefox/${file}`);
       }
+    });
+
+    // images folder copy
+    fs.mkdirSync('./dist/firefox/images', { recursive: true });
+    const firefoxImages = fs.readdirSync('./images');
+    firefoxImages.forEach((image) => {
+      fs.copyFileSync(`./images/${image}`, `./dist/firefox/images/${image}`);
     });
 
     // Create a zip file

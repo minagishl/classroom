@@ -5,6 +5,12 @@
   "description": "This extension automatically plays videos from school study sites",
   "author": "minagishl@icloud.com",
   "permissions": ["contextMenus", "storage"],
+  "icons": {
+    "16": "images/icon16.png",
+    "32": "images/icon32.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
   "background": {
     "service_worker": "background.js"
   },
