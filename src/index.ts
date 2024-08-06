@@ -16,6 +16,7 @@ let previousVideoPlayer = false;
 let previousBackgroundAutoPlay = false;
 let videoPlayer: HTMLMediaElement | undefined | null = null;
 let completed = false;
+let autoPlayEnabled: boolean = true; // default to true
 
 // Specify the value to be detected
 const RGB_COLOR_GREEN = 'rgb(0, 197, 65)';
@@ -32,12 +33,15 @@ if (BACKGROUND_AUTO_PLAY) {
 }
 
 async function updateIsEnabled(): Promise<void> {
-  const data = await browser.storage.local.get('enabled');
+  const data = await browser.storage.local.get(['enabled', 'autoPlayEnabled']);
   isEnabled = data.enabled !== undefined ? data.enabled : true;
+  autoPlayEnabled =
+    data.autoPlayEnabled !== undefined ? data.autoPlayEnabled : true;
   if (isEnabled) {
     await browser.storage.local.set({ enabled: true });
   }
   toggleExtension();
+  updateAutoPlayButton();
 }
 
 function toggleExtension(): void {
@@ -56,14 +60,53 @@ function getIsValidPath(): boolean {
   return isValidPath;
 }
 
+// Create auto-play toggle button
+async function createAutoPlayButton(): Promise<void> {
+  const button = document.createElement('button');
+  button.id = 'autoPlayToggleButton';
+  button.style.position = 'absolute';
+  button.style.top = '10px';
+  button.style.right = '10px';
+  button.style.zIndex = '99999';
+  button.style.padding = '10px';
+  button.style.backgroundColor = '#007bff';
+  button.style.color = 'white';
+  button.style.border = 'none';
+  button.style.borderRadius = '5px';
+  button.style.cursor = 'pointer';
+  button.textContent = autoPlayEnabled ? 'AutoPlay: ON' : 'AutoPlay: OFF';
+
+  button.addEventListener('click', () => {
+    autoPlayEnabled = !autoPlayEnabled;
+    button.textContent = autoPlayEnabled ? 'AutoPlay: ON' : 'AutoPlay: OFF';
+    browser.storage.local.set({ autoPlayEnabled }).catch((error) => {
+      logger.error(`Failed to set autoPlayEnabled in storage: ${error}`);
+    });
+  });
+
+  document.body.appendChild(button);
+}
+
+function updateAutoPlayButton(): void {
+  const button = document.getElementById('autoPlayToggleButton');
+  if (button !== null) {
+    button.textContent = autoPlayEnabled ? 'AutoPlay: ON' : 'AutoPlay: OFF';
+  }
+}
+
 // Execute the function when the page is loaded
 void updateIsEnabled();
+void createAutoPlayButton();
 
 browser.storage.onChanged.addListener((changes) => {
   if (changes.enabled !== undefined) {
     isEnabled = changes.enabled.newValue;
     logger.info(`Extension is now ${isEnabled ? 'enabled' : 'disabled'}`);
     window.alert(`Extension is now ${isEnabled ? 'enabled' : 'disabled'}`);
+  }
+  if (changes.autoPlayEnabled !== undefined) {
+    autoPlayEnabled = changes.autoPlayEnabled.newValue;
+    updateAutoPlayButton();
   }
 });
 
@@ -125,7 +168,7 @@ setInterval(function () {
       previousVideoPlayer = true;
       if (videoPlayer.ended) {
         handleVideoEnd();
-      } else if (videoPlayer.paused) {
+      } else if (autoPlayEnabled && videoPlayer.paused) {
         void videoPlayer.play();
       } else {
         videoPlayer.addEventListener('ended', () => {
