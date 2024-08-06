@@ -5,15 +5,15 @@ browser.runtime.onInstalled.addListener(() => {
   void browser.storage.local.get('enabled').then(() => {
     // Create the parent menu item
     browser.contextMenus.create({
-      id: 'collaboration',
-      title: 'Collaboration',
+      id: 'classroom',
+      title: 'Classroom',
       contexts: ['all'],
     });
 
-    // Create the toggle submenu item under Collaboration
+    // Create the toggle submenu item under Classroom
     browser.contextMenus.create({
       id: 'toggle',
-      parentId: 'collaboration',
+      parentId: 'Classroom',
       title: 'Toggle enabled',
       contexts: ['all'],
     });

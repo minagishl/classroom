@@ -4,7 +4,7 @@ import logger from 'logger';
 // Show in log when extension is loaded
 logger.info('Extension loaded.');
 logger.info(
-  'Please star the repository if you like!\nhttps://github.com/minagishl/collaboration',
+  'Please star the repository if you like!\nhttps://github.com/minagishl/classroom',
 );
 
 // Flags to be used in the code, etc.

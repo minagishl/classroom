@@ -1,5 +1,5 @@
 {
-  "name": "collaboration",
+  "name": "classroom",
   "version": "1.7.0",
   "main": "index.js",
   "type": "commonjs",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/minagishl/collaboration.git"
+    "url": "git+https://github.com/minagishl/classroom.git"
   },
   "author": "minagishl",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/minagishl/collaboration/issues"
+    "url": "https://github.com/minagishl/classroom/issues"
   },
-  "homepage": "https://github.com/minagishl/collaboration#readme",
+  "homepage": "https://github.com/minagishl/classroom#readme",
   "description": "This extension automatically plays videos from school study sites",
   "devDependencies": {
     "@types/chrome": "^0.0.267",
