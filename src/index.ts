@@ -17,6 +17,7 @@ let previousBackgroundAutoPlay = false;
 let videoPlayer: HTMLMediaElement | undefined | null = null;
 let completed = false;
 let autoPlayEnabled: boolean = true; // default to true
+let backgroundAutoPlay: boolean = false; // default to false
 
 // Specify the value to be detected
 const RGB_COLOR_GREEN = 'rgb(0, 197, 65)';
@@ -24,19 +25,17 @@ const TYPE_MOVIE_ROUNDED_PLUS = 'movie-rounded-plus';
 const REDIRECT_TIME = 3000;
 const COOL_TIME = 5000;
 
-// Changing this value allows background playback
-// Just not recommended from a moral standpoint.
-const BACKGROUND_AUTO_PLAY = false;
-
-if (BACKGROUND_AUTO_PLAY) {
-  logger.info('Background playback is enabled.');
-}
-
 async function updateIsEnabled(): Promise<void> {
-  const data = await browser.storage.local.get(['enabled', 'autoPlayEnabled']);
+  const data = await browser.storage.local.get([
+    'enabled',
+    'autoPlayEnabled',
+    'backgroundAutoPlay',
+  ]);
   isEnabled = data.enabled !== undefined ? data.enabled : true;
   autoPlayEnabled =
     data.autoPlayEnabled !== undefined ? data.autoPlayEnabled : true;
+  backgroundAutoPlay =
+    data.backgroundAutoPlay !== undefined ? data.backgroundAutoPlay : false;
   if (isEnabled) {
     await browser.storage.local.set({ enabled: true });
   }
@@ -111,8 +110,25 @@ async function createToggleButtons(): Promise<void> {
     toggleExtension();
   });
 
+  // Background AutoPlay button
+  const backgroundAutoPlayButton = document.createElement('button');
+  backgroundAutoPlayButton.id = 'backgroundAutoPlayToggleButton';
+  backgroundAutoPlayButton.style.cssText = buttonStyle;
+  backgroundAutoPlayButton.style.top = '90px';
+  backgroundAutoPlayButton.style.right = '10px';
+  backgroundAutoPlayButton.innerHTML = `<span style="flex-grow: 1; text-align: left; padding-right: 10px;">Background:</span><span>${backgroundAutoPlay ? 'ON' : 'OFF'}</span>`;
+
+  backgroundAutoPlayButton.addEventListener('click', () => {
+    backgroundAutoPlay = !backgroundAutoPlay;
+    backgroundAutoPlayButton.innerHTML = `<span style="flex-grow: 1; text-align: left; padding-right: 10px;">Background:</span><span>${backgroundAutoPlay ? 'ON' : 'OFF'}</span>`;
+    browser.storage.local.set({ backgroundAutoPlay }).catch((error) => {
+      logger.error(`Failed to set backgroundAutoPlay in storage: ${error}`);
+    });
+  });
+
   document.body.appendChild(autoPlayButton);
   document.body.appendChild(enableButton);
+  document.body.appendChild(backgroundAutoPlayButton);
 }
 
 function updateButtons(): void {
@@ -124,6 +140,13 @@ function updateButtons(): void {
   const enableButton = document.getElementById('extensionToggleButton');
   if (enableButton !== null) {
     enableButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Extension:</span><span>${isEnabled ? 'ON' : 'OFF'}</span>`;
+  }
+
+  const backgroundAutoPlayButton = document.getElementById(
+    'backgroundAutoPlayToggleButton',
+  );
+  if (backgroundAutoPlayButton !== null) {
+    backgroundAutoPlayButton.innerHTML = `<span style="flex-grow: 1; text-align: left; padding-right: 10px;">Background:</span><span>${backgroundAutoPlay ? 'ON' : 'OFF'}</span>`;
   }
 }
 
@@ -142,6 +165,10 @@ browser.storage.onChanged.addListener((changes) => {
     autoPlayEnabled = changes.autoPlayEnabled.newValue;
     updateButtons();
   }
+  if (changes.backgroundAutoPlay !== undefined) {
+    backgroundAutoPlay = changes.backgroundAutoPlay.newValue;
+    updateButtons();
+  }
 });
 
 function handleVideoEnd(): void {
@@ -153,13 +180,13 @@ function handleVideoEnd(): void {
     lastExecutionTime = currentTime;
 
     // return if background playback is in the background and backgroundAutoPlay is false
-    if (document.hidden && !BACKGROUND_AUTO_PLAY) {
+    if (document.hidden && !backgroundAutoPlay) {
       // Once output, do not output again
       if (!previousBackgroundAutoPlay)
         logger.info('Did not move because it was playing in the background');
       previousBackgroundAutoPlay = true;
       return;
-    } else if (document.hidden && BACKGROUND_AUTO_PLAY) {
+    } else if (document.hidden && backgroundAutoPlay) {
       logger.info('Playback proceeds in the background');
     }
 
