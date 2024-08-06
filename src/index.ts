@@ -88,6 +88,7 @@ function handleVideoEnd(): void {
 
     previousBackgroundAutoPlay = false;
     logger.info('Video ended.');
+
     const list = getList();
     const index = findIndex(list);
     if (index !== -1) {
@@ -124,6 +125,8 @@ setInterval(function () {
       previousVideoPlayer = true;
       if (videoPlayer.ended) {
         handleVideoEnd();
+      } else if (videoPlayer.paused) {
+        void videoPlayer.play();
       } else {
         videoPlayer.addEventListener('ended', () => {
           handleVideoEnd();
