@@ -41,7 +41,7 @@ async function updateIsEnabled(): Promise<void> {
     await browser.storage.local.set({ enabled: true });
   }
   toggleExtension();
-  updateAutoPlayButton();
+  updateButtons();
 }
 
 function toggleExtension(): void {
@@ -60,53 +60,87 @@ function getIsValidPath(): boolean {
   return isValidPath;
 }
 
-// Create auto-play toggle button
-async function createAutoPlayButton(): Promise<void> {
-  const button = document.createElement('button');
-  button.id = 'autoPlayToggleButton';
-  button.style.position = 'absolute';
-  button.style.top = '10px';
-  button.style.right = '10px';
-  button.style.zIndex = '99999';
-  button.style.padding = '10px';
-  button.style.backgroundColor = '#007bff';
-  button.style.color = 'white';
-  button.style.border = 'none';
-  button.style.borderRadius = '5px';
-  button.style.cursor = 'pointer';
-  button.textContent = autoPlayEnabled ? 'AutoPlay: ON' : 'AutoPlay: OFF';
+// Create toggle buttons
+async function createToggleButtons(): Promise<void> {
+  // Common button styles
+  const buttonStyle = `
+    position: absolute;
+    z-index: 99999;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  `;
 
-  button.addEventListener('click', () => {
+  // AutoPlay button
+  const autoPlayButton = document.createElement('button');
+  autoPlayButton.id = 'autoPlayToggleButton';
+  autoPlayButton.style.cssText = buttonStyle;
+  autoPlayButton.style.top = '10px';
+  autoPlayButton.style.right = '10px';
+  autoPlayButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Automatic:</span><span>${autoPlayEnabled ? 'ON' : 'OFF'}</span>`;
+
+  autoPlayButton.addEventListener('click', () => {
     autoPlayEnabled = !autoPlayEnabled;
-    button.textContent = autoPlayEnabled ? 'AutoPlay: ON' : 'AutoPlay: OFF';
+    autoPlayButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Automatic:</span><span>${autoPlayEnabled ? 'ON' : 'OFF'}</span>`;
     browser.storage.local.set({ autoPlayEnabled }).catch((error) => {
       logger.error(`Failed to set autoPlayEnabled in storage: ${error}`);
     });
   });
 
-  document.body.appendChild(button);
+  // Enable/Disable Extension button
+  const enableButton = document.createElement('button');
+  enableButton.id = 'extensionToggleButton';
+  enableButton.style.cssText = buttonStyle;
+  enableButton.style.top = '50px';
+  enableButton.style.right = '10px';
+  enableButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Extension:</span><span>${isEnabled ? 'ON' : 'OFF'}</span>`;
+
+  enableButton.addEventListener('click', () => {
+    isEnabled = !isEnabled;
+    enableButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Extension:</span><span>${isEnabled ? 'ON' : 'OFF'}</span>`;
+    browser.storage.local.set({ enabled: isEnabled }).catch((error) => {
+      logger.error(`Failed to set enabled in storage: ${error}`);
+    });
+    toggleExtension();
+  });
+
+  document.body.appendChild(autoPlayButton);
+  document.body.appendChild(enableButton);
 }
 
-function updateAutoPlayButton(): void {
-  const button = document.getElementById('autoPlayToggleButton');
-  if (button !== null) {
-    button.textContent = autoPlayEnabled ? 'AutoPlay: ON' : 'AutoPlay: OFF';
+function updateButtons(): void {
+  const autoPlayButton = document.getElementById('autoPlayToggleButton');
+  if (autoPlayButton !== null) {
+    autoPlayButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Automatic:</span><span>${autoPlayEnabled ? 'ON' : 'OFF'}</span>`;
+  }
+
+  const enableButton = document.getElementById('extensionToggleButton');
+  if (enableButton !== null) {
+    enableButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Extension:</span><span>${isEnabled ? 'ON' : 'OFF'}</span>`;
   }
 }
 
 // Execute the function when the page is loaded
 void updateIsEnabled();
-void createAutoPlayButton();
+void createToggleButtons();
 
 browser.storage.onChanged.addListener((changes) => {
   if (changes.enabled !== undefined) {
     isEnabled = changes.enabled.newValue;
     logger.info(`Extension is now ${isEnabled ? 'enabled' : 'disabled'}`);
     window.alert(`Extension is now ${isEnabled ? 'enabled' : 'disabled'}`);
+    updateButtons();
   }
   if (changes.autoPlayEnabled !== undefined) {
     autoPlayEnabled = changes.autoPlayEnabled.newValue;
-    updateAutoPlayButton();
+    updateButtons();
   }
 });
 
