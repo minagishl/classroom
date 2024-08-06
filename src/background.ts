@@ -13,7 +13,7 @@ browser.runtime.onInstalled.addListener(() => {
     // Create the toggle submenu item under Classroom
     browser.contextMenus.create({
       id: 'toggle',
-      parentId: 'Classroom',
+      parentId: 'classroom',
       title: 'Toggle enabled',
       contexts: ['all'],
     });
