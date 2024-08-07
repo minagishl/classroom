@@ -227,6 +227,13 @@ setInterval(function () {
     if (typeof videoPlayer !== 'undefined' && videoPlayer !== null) {
       if (!previousVideoPlayer) logger.info('Video player found.');
       previousVideoPlayer = true;
+
+      // Add attributes to the video element
+      videoPlayer.setAttribute('playsinline', '');
+      videoPlayer.setAttribute('muted', '');
+      videoPlayer.setAttribute('autoplay', '');
+      videoPlayer.setAttribute('controls', '');
+
       if (videoPlayer.ended) {
         handleVideoEnd();
       } else if (autoPlayEnabled && videoPlayer.paused) {
