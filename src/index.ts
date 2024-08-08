@@ -190,9 +190,12 @@ function handleVideoEnd(): void {
     const list = getList();
     const index = findIndex(list);
     if (index !== -1) {
-      moveElement(index + 1);
-      logger.info('Moving to the next video.');
-      previousVideoPlayer = false;
+      moveElement(index + 1)
+        .then(() => {
+          logger.info('Moving to the next video.');
+          previousVideoPlayer = false;
+        })
+        .catch(logger.error);
     } else if (!completed) {
       completed = true;
       window.alert('All videos have been completed.');
@@ -319,13 +322,24 @@ function getList(): ListItem[] {
   });
 }
 
-function moveElement(number: number): void {
-  const element = document.querySelector<HTMLElement>(
-    `ul[aria-label="必修教材リスト"] li:nth-child(${number}) div`,
-  );
-  if (element === null)
-    throw new Error(`Error: cannot find an element with the number ${number}`);
-  element.dispatchEvent(
-    new MouseEvent('click', { bubbles: true, cancelable: true, view: window }),
-  );
+async function moveElement(number: number): Promise<void> {
+  await new Promise<void>((resolve, reject) => {
+    const element = document.querySelector<HTMLElement>(
+      `ul[aria-label="必修教材リスト"] li:nth-child(${number}) div`,
+    );
+    if (element === null) {
+      reject(
+        new Error(`Error: cannot find an element with the number ${number}`),
+      );
+    } else {
+      element.dispatchEvent(
+        new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+        }),
+      );
+      resolve();
+    }
+  });
 }
