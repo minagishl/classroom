@@ -187,6 +187,7 @@ function handleVideoEnd(): void {
     if (index !== -1) {
       logger.info('Moving to the next video.');
       moveElement(index + 1);
+      previousVideoPlayer = false;
     } else if (!completed) {
       completed = true;
       window.alert('All videos have been completed.');
@@ -200,14 +201,12 @@ function handleVideoEnd(): void {
         window.location.href = `/courses/${course}/chapters/${chapter}`;
       }, REDIRECT_TIME);
     }
-  } else {
-    logger.info('Extensions were not executed because they are disabled');
   }
 }
 
-setInterval(() => {
+let intervalId = setInterval(() => {
   if (getIsValidPath()) {
-    const videoPlayer = getVideoPlayer();
+    videoPlayer = getVideoPlayer();
     if (videoPlayer !== null) {
       if (!previousVideoPlayer) logger.info('Video player found.');
       previousVideoPlayer = true;
@@ -223,6 +222,7 @@ setInterval(() => {
       } else {
         videoPlayer.addEventListener('ended', handleVideoEnd);
       }
+      clearInterval(intervalId); // Video player found, clear the interval
     } else if (Date.now() - lastVideoPlayerTime > COOL_TIME) {
       logger.info('Video player not found.');
       lastVideoPlayerTime = Date.now();
@@ -232,7 +232,7 @@ setInterval(() => {
 
 function getVideoPlayer(): HTMLMediaElement | null {
   try {
-    if (videoPlayer !== null) {
+    if (videoPlayer === null) {
       const iframeElement =
         document.querySelector<HTMLIFrameElement>('iframe[title="教材"]');
       const iframeDocument =
@@ -250,6 +250,34 @@ function getVideoPlayer(): HTMLMediaElement | null {
 const observer = new MutationObserver(() => {
   videoPlayer = null;
   isValidPath = undefined;
+  intervalId = setInterval(() => {
+    // Restart the interval when DOM changes
+    if (getIsValidPath()) {
+      videoPlayer = getVideoPlayer();
+      if (videoPlayer !== null) {
+        if (!previousVideoPlayer) logger.info('Video player found.');
+        previousVideoPlayer = true;
+
+        videoPlayer.setAttribute('playsinline', '');
+        videoPlayer.setAttribute('muted', '');
+        videoPlayer.setAttribute('autoplay', '');
+        videoPlayer.setAttribute('controls', '');
+
+        if (videoPlayer.ended) {
+          handleVideoEnd();
+        } else if (autoPlayEnabled && videoPlayer.paused) {
+          videoPlayer.play().catch(logger.error);
+        } else {
+          videoPlayer.addEventListener('ended', handleVideoEnd);
+        }
+
+        clearInterval(intervalId); // Video player found, clear the interval
+      } else if (Date.now() - lastVideoPlayerTime > COOL_TIME) {
+        logger.info('Video player not found.');
+        lastVideoPlayerTime = Date.now();
+      }
+    }
+  }, 500);
 });
 
 observer.observe(document.body, { childList: true, subtree: true });
