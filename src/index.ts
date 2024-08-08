@@ -20,6 +20,7 @@ let completed: boolean = false;
 let autoPlayEnabled: boolean = true;
 let backgroundAutoPlay: boolean = false;
 
+const HIDDEN_BACKGROUND_BUTTON: boolean = true;
 const RGB_COLOR_GREEN = 'rgb(0, 197, 65)';
 const TYPE_MOVIE_ROUNDED_PLUS = 'movie-rounded-plus';
 const REDIRECT_TIME = 3000;
@@ -95,7 +96,7 @@ async function createToggleButtons(): Promise<void> {
   createToggleButton(
     'autoPlayToggleButton',
     'Automatic',
-    90,
+    HIDDEN_BACKGROUND_BUTTON ? 50 : 90,
     autoPlayEnabled,
     () => {
       autoPlayEnabled = !autoPlayEnabled;
@@ -107,7 +108,7 @@ async function createToggleButtons(): Promise<void> {
   createToggleButton(
     'extensionToggleButton',
     'Extension',
-    50,
+    HIDDEN_BACKGROUND_BUTTON ? 10 : 50,
     isEnabled,
     () => {
       isEnabled = !isEnabled;
@@ -116,6 +117,10 @@ async function createToggleButtons(): Promise<void> {
       toggleExtension();
     },
   );
+
+  if (HIDDEN_BACKGROUND_BUTTON) {
+    return;
+  }
 
   createToggleButton(
     'backgroundAutoPlayToggleButton',
