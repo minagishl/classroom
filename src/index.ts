@@ -190,8 +190,8 @@ function handleVideoEnd(): void {
     const list = getList();
     const index = findIndex(list);
     if (index !== -1) {
-      logger.info('Moving to the next video.');
       moveElement(index + 1);
+      logger.info('Moving to the next video.');
       previousVideoPlayer = false;
     } else if (!completed) {
       completed = true;
