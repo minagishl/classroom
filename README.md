@@ -2,6 +2,8 @@
 
 ## Overview
 
+> **Note:** It is recommended that you fork the repository. Sometimes we keep it private.
+
 This extension makes it easier to watch videos on N Prep!
 When a video ends, it automatically moves to the next video.
 You can enable or disable this extension from the right-click menu.
