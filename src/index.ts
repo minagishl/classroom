@@ -73,15 +73,15 @@ function getIsValidPath(): boolean {
 function createToggleButton(
   id: string,
   text: string,
-  top: number,
+  bottom: number,
   value: boolean,
   handler: () => void,
 ): void {
   const button = document.createElement('button');
   button.id = id;
   button.style.cssText = BUTTON_STYLE;
-  button.style.top = `${top}px`;
-  button.style.right = '10px';
+  button.style.bottom = `${bottom}px`;
+  button.style.right = '40px';
   button.innerHTML = `<span style="flex-grow: 1; text-align: left; padding-right: 10px;">${text}:</span><span>${value ? 'ON' : 'OFF'}</span>`;
   button.addEventListener('click', handler);
   document.body.appendChild(button);
@@ -91,7 +91,7 @@ async function createToggleButtons(): Promise<void> {
   createToggleButton(
     'autoPlayToggleButton',
     'Automatic',
-    10,
+    90,
     autoPlayEnabled,
     () => {
       autoPlayEnabled = !autoPlayEnabled;
@@ -116,7 +116,7 @@ async function createToggleButtons(): Promise<void> {
   createToggleButton(
     'backgroundAutoPlayToggleButton',
     'Background',
-    90,
+    10,
     backgroundAutoPlay,
     () => {
       backgroundAutoPlay = !backgroundAutoPlay;
