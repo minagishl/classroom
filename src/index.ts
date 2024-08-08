@@ -32,7 +32,6 @@ const BUTTON_STYLE = `
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  min-width: 120px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -76,14 +75,16 @@ function createToggleButton(
   bottom: number,
   value: boolean,
   handler: () => void,
-  maxWidth: number = 120,
+  maxWidth?: number,
+  minWidth?: number,
 ): void {
   const button = document.createElement('button');
   button.id = id;
-  button.style.maxWidth = `${maxWidth}px`;
   button.style.cssText = BUTTON_STYLE;
   button.style.bottom = `${bottom}px`;
   button.style.right = '40px';
+  button.style.minWidth = `${minWidth ?? '120'}px`;
+  button.style.maxWidth = `${maxWidth ?? '120'}px`;
   button.innerHTML = `<span style="flex-grow: 1; text-align: left;">${text}:</span><span>${value ? 'ON' : 'OFF'}</span>`;
   button.addEventListener('click', handler);
   document.body.appendChild(button);
@@ -129,6 +130,7 @@ async function createToggleButtons(): Promise<void> {
       );
       browser.storage.local.set({ backgroundAutoPlay }).catch(logger.error);
     },
+    135,
     135,
   );
 }
