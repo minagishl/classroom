@@ -14,9 +14,12 @@ In no event shall the author or copyright holder be liable for any claim, damage
 
 ## Supported Browsers
 
+> **Note:** For iOS devices, please use the Orion browser
+
 - Chrome
 - Edge
 - Firefox
+- Orion (Install from Google Webstore)
 
 ## To School Officials
 
