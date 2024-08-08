@@ -193,7 +193,6 @@ function handleVideoEnd(): void {
       moveElement(index + 1)
         .then(() => {
           logger.info('Moving to the next video.');
-          previousVideoPlayer = false;
         })
         .catch(logger.error);
     } else if (!completed) {
