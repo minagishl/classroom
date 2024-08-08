@@ -12,6 +12,7 @@ let isEnabled: boolean = true;
 let isValidPath: boolean | undefined;
 let lastExecutionTime: number = 0;
 let lastVideoPlayerTime: number = 0;
+let lastMovingVideoTime: number = 0;
 let previousVideoPlayer: boolean = false;
 let previousBackgroundAutoPlay: boolean = false;
 let videoPlayer: HTMLMediaElement | null = null;
@@ -173,7 +174,12 @@ browser.storage.onChanged.addListener((changes) => {
 });
 
 function handleVideoEnd(): void {
-  if (isEnabled && Date.now() - lastExecutionTime >= COOL_TIME) {
+  const now = Date.now();
+  if (
+    isEnabled &&
+    now - lastExecutionTime >= COOL_TIME &&
+    now - lastMovingVideoTime >= COOL_TIME // Prevent moving video too fast
+  ) {
     lastExecutionTime = Date.now();
     if (document.hidden && !backgroundAutoPlay) {
       if (!previousBackgroundAutoPlay) {
@@ -193,6 +199,7 @@ function handleVideoEnd(): void {
       moveElement(index + 1)
         .then(() => {
           logger.info('Moving to the next video.');
+          lastMovingVideoTime = Date.now();
         })
         .catch(logger.error);
     } else if (!completed) {
