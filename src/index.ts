@@ -76,13 +76,15 @@ function createToggleButton(
   bottom: number,
   value: boolean,
   handler: () => void,
+  maxWidth: number = 120,
 ): void {
   const button = document.createElement('button');
   button.id = id;
+  button.style.maxWidth = `${maxWidth}px`;
   button.style.cssText = BUTTON_STYLE;
   button.style.bottom = `${bottom}px`;
   button.style.right = '40px';
-  button.innerHTML = `<span style="flex-grow: 1; text-align: left; padding-right: 10px;">${text}:</span><span>${value ? 'ON' : 'OFF'}</span>`;
+  button.innerHTML = `<span style="flex-grow: 1; text-align: left;">${text}:</span><span>${value ? 'ON' : 'OFF'}</span>`;
   button.addEventListener('click', handler);
   document.body.appendChild(button);
 }
@@ -127,6 +129,7 @@ async function createToggleButtons(): Promise<void> {
       );
       browser.storage.local.set({ backgroundAutoPlay }).catch(logger.error);
     },
+    135,
   );
 }
 
