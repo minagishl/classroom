@@ -23,6 +23,8 @@ In no event shall the author or copyright holder be liable for any claim, damage
 - Firefox
 - Orion (Install from Google Webstore)
 
+<!-- Tested on all browsers! Orion is complicated, so contact me (if you want to contact me on N-High School's Slack, follow this link https://n-highschool.slack.com/archives/C06T3T1E3C1) -->
+
 ## To School Officials
 
 This application does not interfere in any way with N Prep School's servers.
