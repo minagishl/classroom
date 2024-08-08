@@ -7,24 +7,38 @@ logger.info(
   'Please star the repository if you like!\nhttps://github.com/minagishl/classroom',
 );
 
-// Flags to be used in the code, etc.
-let isEnabled: boolean;
+// Flags and constants
+let isEnabled: boolean = true;
 let isValidPath: boolean | undefined;
-let lastExecutionTime = 0;
-let lastVideoPlayerTime = 0;
-let previousVideoPlayer = false;
-let previousBackgroundAutoPlay = false;
-let videoPlayer: HTMLMediaElement | undefined | null = null;
-let completed = false;
-let autoPlayEnabled: boolean = true; // default to true
-let backgroundAutoPlay: boolean = false; // default to false
+let lastExecutionTime: number = 0;
+let lastVideoPlayerTime: number = 0;
+let previousVideoPlayer: boolean = false;
+let previousBackgroundAutoPlay: boolean = false;
+let videoPlayer: HTMLMediaElement | null = null;
+let completed: boolean = false;
+let autoPlayEnabled: boolean = true;
+let backgroundAutoPlay: boolean = false;
 
-// Specify the value to be detected
 const RGB_COLOR_GREEN = 'rgb(0, 197, 65)';
 const TYPE_MOVIE_ROUNDED_PLUS = 'movie-rounded-plus';
 const REDIRECT_TIME = 3000;
 const COOL_TIME = 5000;
+const BUTTON_STYLE = `
+  position: absolute;
+  z-index: 99999;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  min-width: 120px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
+// Initialize extension state from storage
 async function updateIsEnabled(): Promise<void> {
   const data = await browser.storage.local.get([
     'enabled',
@@ -44,11 +58,7 @@ async function updateIsEnabled(): Promise<void> {
 }
 
 function toggleExtension(): void {
-  if (isEnabled) {
-    logger.info('Extension is enabled.');
-  } else {
-    logger.info('Extension is disabled.');
-  }
+  logger.info(`Extension is ${isEnabled ? 'enabled' : 'disabled'}.`);
 }
 
 function getIsValidPath(): boolean {
@@ -60,97 +70,83 @@ function getIsValidPath(): boolean {
 }
 
 // Create toggle buttons
+function createToggleButton(
+  id: string,
+  text: string,
+  top: number,
+  value: boolean,
+  handler: () => void,
+): void {
+  const button = document.createElement('button');
+  button.id = id;
+  button.style.cssText = BUTTON_STYLE;
+  button.style.top = `${top}px`;
+  button.style.right = '10px';
+  button.innerHTML = `<span style="flex-grow: 1; text-align: left; padding-right: 10px;">${text}:</span><span>${value ? 'ON' : 'OFF'}</span>`;
+  button.addEventListener('click', handler);
+  document.body.appendChild(button);
+}
+
 async function createToggleButtons(): Promise<void> {
-  // Common button styles
-  const buttonStyle = `
-    position: absolute;
-    z-index: 99999;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    min-width: 120px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  `;
+  createToggleButton(
+    'autoPlayToggleButton',
+    'Automatic',
+    10,
+    autoPlayEnabled,
+    () => {
+      autoPlayEnabled = !autoPlayEnabled;
+      updateButton('autoPlayToggleButton', 'Automatic', autoPlayEnabled);
+      browser.storage.local.set({ autoPlayEnabled }).catch(logger.error);
+    },
+  );
 
-  // AutoPlay button
-  const autoPlayButton = document.createElement('button');
-  autoPlayButton.id = 'autoPlayToggleButton';
-  autoPlayButton.style.cssText = buttonStyle;
-  autoPlayButton.style.top = '10px';
-  autoPlayButton.style.right = '10px';
-  autoPlayButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Automatic:</span><span>${autoPlayEnabled ? 'ON' : 'OFF'}</span>`;
+  createToggleButton(
+    'extensionToggleButton',
+    'Extension',
+    50,
+    isEnabled,
+    () => {
+      isEnabled = !isEnabled;
+      updateButton('extensionToggleButton', 'Extension', isEnabled);
+      browser.storage.local.set({ enabled: isEnabled }).catch(logger.error);
+      toggleExtension();
+    },
+  );
 
-  autoPlayButton.addEventListener('click', () => {
-    autoPlayEnabled = !autoPlayEnabled;
-    autoPlayButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Automatic:</span><span>${autoPlayEnabled ? 'ON' : 'OFF'}</span>`;
-    browser.storage.local.set({ autoPlayEnabled }).catch((error) => {
-      logger.error(`Failed to set autoPlayEnabled in storage: ${error}`);
-    });
-  });
+  createToggleButton(
+    'backgroundAutoPlayToggleButton',
+    'Background',
+    90,
+    backgroundAutoPlay,
+    () => {
+      backgroundAutoPlay = !backgroundAutoPlay;
+      updateButton(
+        'backgroundAutoPlayToggleButton',
+        'Background',
+        backgroundAutoPlay,
+      );
+      browser.storage.local.set({ backgroundAutoPlay }).catch(logger.error);
+    },
+  );
+}
 
-  // Enable/Disable Extension button
-  const enableButton = document.createElement('button');
-  enableButton.id = 'extensionToggleButton';
-  enableButton.style.cssText = buttonStyle;
-  enableButton.style.top = '50px';
-  enableButton.style.right = '10px';
-  enableButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Extension:</span><span>${isEnabled ? 'ON' : 'OFF'}</span>`;
-
-  enableButton.addEventListener('click', () => {
-    isEnabled = !isEnabled;
-    enableButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Extension:</span><span>${isEnabled ? 'ON' : 'OFF'}</span>`;
-    browser.storage.local.set({ enabled: isEnabled }).catch((error) => {
-      logger.error(`Failed to set enabled in storage: ${error}`);
-    });
-    toggleExtension();
-  });
-
-  // Background AutoPlay button
-  const backgroundAutoPlayButton = document.createElement('button');
-  backgroundAutoPlayButton.id = 'backgroundAutoPlayToggleButton';
-  backgroundAutoPlayButton.style.cssText = buttonStyle;
-  backgroundAutoPlayButton.style.top = '90px';
-  backgroundAutoPlayButton.style.right = '10px';
-  backgroundAutoPlayButton.innerHTML = `<span style="flex-grow: 1; text-align: left; padding-right: 10px;">Background:</span><span>${backgroundAutoPlay ? 'ON' : 'OFF'}</span>`;
-
-  backgroundAutoPlayButton.addEventListener('click', () => {
-    backgroundAutoPlay = !backgroundAutoPlay;
-    backgroundAutoPlayButton.innerHTML = `<span style="flex-grow: 1; text-align: left; padding-right: 10px;">Background:</span><span>${backgroundAutoPlay ? 'ON' : 'OFF'}</span>`;
-    browser.storage.local.set({ backgroundAutoPlay }).catch((error) => {
-      logger.error(`Failed to set backgroundAutoPlay in storage: ${error}`);
-    });
-  });
-
-  document.body.appendChild(autoPlayButton);
-  document.body.appendChild(enableButton);
-  document.body.appendChild(backgroundAutoPlayButton);
+function updateButton(id: string, text: string, value: boolean): void {
+  const button = document.getElementById(id);
+  if (button !== null) {
+    button.innerHTML = `<span style="flex-grow: 1; text-align: left; padding-right: 10px;">${text}:</span><span>${value ? 'ON' : 'OFF'}</span>`;
+  }
 }
 
 function updateButtons(): void {
-  const autoPlayButton = document.getElementById('autoPlayToggleButton');
-  if (autoPlayButton !== null) {
-    autoPlayButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Automatic:</span><span>${autoPlayEnabled ? 'ON' : 'OFF'}</span>`;
-  }
-
-  const enableButton = document.getElementById('extensionToggleButton');
-  if (enableButton !== null) {
-    enableButton.innerHTML = `<span style="flex-grow: 1; text-align: left;">Extension:</span><span>${isEnabled ? 'ON' : 'OFF'}</span>`;
-  }
-
-  const backgroundAutoPlayButton = document.getElementById(
+  updateButton('autoPlayToggleButton', 'Automatic', autoPlayEnabled);
+  updateButton('extensionToggleButton', 'Extension', isEnabled);
+  updateButton(
     'backgroundAutoPlayToggleButton',
+    'Background',
+    backgroundAutoPlay,
   );
-  if (backgroundAutoPlayButton !== null) {
-    backgroundAutoPlayButton.innerHTML = `<span style="flex-grow: 1; text-align: left; padding-right: 10px;">Background:</span><span>${backgroundAutoPlay ? 'ON' : 'OFF'}</span>`;
-  }
 }
 
-// Execute the function when the page is loaded
 void updateIsEnabled();
 void createToggleButtons();
 
@@ -172,24 +168,17 @@ browser.storage.onChanged.addListener((changes) => {
 });
 
 function handleVideoEnd(): void {
-  if (isEnabled) {
-    const currentTime = Date.now();
-    if (currentTime - lastExecutionTime < COOL_TIME) {
-      return;
-    }
-    lastExecutionTime = currentTime;
-
-    // return if background playback is in the background and backgroundAutoPlay is false
+  if (isEnabled && Date.now() - lastExecutionTime >= COOL_TIME) {
+    lastExecutionTime = Date.now();
     if (document.hidden && !backgroundAutoPlay) {
-      // Once output, do not output again
-      if (!previousBackgroundAutoPlay)
+      if (!previousBackgroundAutoPlay) {
         logger.info('Did not move because it was playing in the background');
+      }
       previousBackgroundAutoPlay = true;
       return;
     } else if (document.hidden && backgroundAutoPlay) {
       logger.info('Playback proceeds in the background');
     }
-
     previousBackgroundAutoPlay = false;
     logger.info('Video ended.');
 
@@ -198,37 +187,30 @@ function handleVideoEnd(): void {
     if (index !== -1) {
       logger.info('Moving to the next video.');
       moveElement(index + 1);
-    } else {
-      if (!completed) {
-        completed = true;
-        window.alert('All videos have been completed.');
+    } else if (!completed) {
+      completed = true;
+      window.alert('All videos have been completed.');
+      logger.info('All videos have been completed.');
+      logger.info(`Move to chapter after ${REDIRECT_TIME / 1000} seconds...`);
 
-        logger.info('All videos have been completed.');
-        logger.info(`Move to chapter after ${REDIRECT_TIME / 1000} seconds...`);
-
-        setTimeout(() => {
-          const url = new URL(window.location.href);
-          const course = url.pathname.split('/')[2];
-          const chapter = url.pathname.split('/')[4];
-          window.location.href = `/courses/${course}/chapters/${chapter}`;
-        }, REDIRECT_TIME);
-      }
+      setTimeout(() => {
+        const url = new URL(window.location.href);
+        const course = url.pathname.split('/')[2];
+        const chapter = url.pathname.split('/')[4];
+        window.location.href = `/courses/${course}/chapters/${chapter}`;
+      }, REDIRECT_TIME);
     }
   } else {
     logger.info('Extensions were not executed because they are disabled');
   }
 }
 
-// Reason for this code: It could be a code that looks for it when rendering the DOM,
-// But sometimes it fails, so this code is used.
-setInterval(function () {
+setInterval(() => {
   if (getIsValidPath()) {
-    const videoPlayer: HTMLMediaElement | null | undefined = getVideoPlayer();
-    if (typeof videoPlayer !== 'undefined' && videoPlayer !== null) {
+    const videoPlayer = getVideoPlayer();
+    if (videoPlayer !== null) {
       if (!previousVideoPlayer) logger.info('Video player found.');
       previousVideoPlayer = true;
-
-      // Add attributes to the video element
       videoPlayer.setAttribute('playsinline', '');
       videoPlayer.setAttribute('muted', '');
       videoPlayer.setAttribute('autoplay', '');
@@ -237,107 +219,80 @@ setInterval(function () {
       if (videoPlayer.ended) {
         handleVideoEnd();
       } else if (autoPlayEnabled && videoPlayer.paused) {
-        void videoPlayer.play();
+        videoPlayer.play().catch(logger.error);
       } else {
-        videoPlayer.addEventListener('ended', () => {
-          handleVideoEnd();
-        });
+        videoPlayer.addEventListener('ended', handleVideoEnd);
       }
-    } else {
-      if (Date.now() - lastVideoPlayerTime > COOL_TIME) {
-        logger.info('Video player not found.');
-        lastVideoPlayerTime = Date.now();
-      }
+    } else if (Date.now() - lastVideoPlayerTime > COOL_TIME) {
+      logger.info('Video player not found.');
+      lastVideoPlayerTime = Date.now();
     }
   }
 }, 500);
 
 function getVideoPlayer(): HTMLMediaElement | null {
   try {
-    if (videoPlayer === null || videoPlayer === undefined) {
-      const iframeElement: HTMLIFrameElement | null =
-        document.querySelector('iframe[title="教材"]');
+    if (videoPlayer !== null) {
+      const iframeElement =
+        document.querySelector<HTMLIFrameElement>('iframe[title="教材"]');
       const iframeDocument =
         iframeElement?.contentDocument ??
         iframeElement?.contentWindow?.document;
-
-      videoPlayer = iframeDocument?.querySelector('video');
-      return videoPlayer ?? null;
-    } else {
-      return videoPlayer;
+      videoPlayer =
+        iframeDocument?.querySelector<HTMLMediaElement>('video') ?? null;
     }
-  } catch (error) {
+    return videoPlayer;
+  } catch {
     return null;
   }
 }
 
-// Create MutationObserver to monitor DOM changes
 const observer = new MutationObserver(() => {
   videoPlayer = null;
   isValidPath = undefined;
 });
 
-// Start monitoring changes in child and descendant nodes of the body element
 observer.observe(document.body, { childList: true, subtree: true });
 
-function findIndex(
-  data: Array<{ title: string; passed: boolean; type: string }>,
-): number {
-  for (let i = 0; i < data.length; i++) {
-    if (data[i].type === 'main' && !data[i].passed) {
-      return i;
-    }
-  }
-  return -1; // If the corresponding object could not be found
+interface ListItem {
+  title: string;
+  passed: boolean;
+  type: string;
 }
 
-function getList(): Array<{ title: string; passed: boolean; type: string }> {
-  const element = Array.from(
-    document.querySelector('ul[aria-label="必修教材リスト"]')?.childNodes ?? [],
-  ) as HTMLElement[];
+function findIndex(data: ListItem[]): number {
+  return data.findIndex((item) => item.type === 'main' && !item.passed);
+}
 
-  const list = Array.from(element).map((element) => {
-    // Get the title (though it's not particularly useful)
-    const titleElement = element.querySelector(
+function getList(): ListItem[] {
+  const elements = document.querySelectorAll<HTMLLIElement>(
+    'ul[aria-label="必修教材リスト"] > li',
+  );
+  return Array.from(elements).map((element) => {
+    const titleElement = element.querySelector<HTMLSpanElement>(
       'div div div span:nth-child(2)',
-    ) as unknown as HTMLElement;
-    const title = titleElement.textContent?.trim() ?? '';
-
-    // Confirmation of completion
-    const iconElement = element.querySelector(
-      'div div div i',
-    ) as unknown as HTMLElement;
+    );
+    const title = titleElement?.textContent?.trim() ?? '';
+    const iconElement = element.querySelector<HTMLElement>('div div div i');
     const passed =
-      // Countermeasure to delay icon color in case of DOM construction.
-      iconElement.style.color === RGB_COLOR_GREEN ||
-      element.textContent?.includes('視聴済み') === true;
-
-    // Confirmation of availability of preliminary and required materials
+      (iconElement?.style.color === RGB_COLOR_GREEN ||
+        element.textContent?.includes('視聴済み')) ??
+      false;
     const type =
       iconElement?.getAttribute('type') === TYPE_MOVIE_ROUNDED_PLUS
         ? 'supplement'
         : 'main';
-
     return { title, passed, type };
   });
-
-  return list;
 }
 
 function moveElement(number: number): void {
-  const element = document.querySelector(
+  const element = document.querySelector<HTMLElement>(
     `ul[aria-label="必修教材リスト"] li:nth-child(${number}) div`,
   );
-
-  if (element === null) {
+  if (element === null)
     throw new Error(`Error: cannot find an element with the number ${number}`);
-  }
-
-  const event = new MouseEvent('click', {
-    bubbles: true,
-    cancelable: true,
-    view: window,
-  });
-
-  element.dispatchEvent(event);
+  element.dispatchEvent(
+    new MouseEvent('click', { bubbles: true, cancelable: true, view: window }),
+  );
 }
