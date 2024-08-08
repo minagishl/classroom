@@ -1,5 +1,3 @@
-markdown: kramdown
-theme: minima
 permalink: /:path/
 plugins:
   - jekyll-sitemap
