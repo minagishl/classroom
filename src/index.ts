@@ -250,7 +250,7 @@ setInterval(function () {
       }
     }
   }
-}, 1000);
+}, 500);
 
 function getVideoPlayer(): HTMLMediaElement | null {
   try {
