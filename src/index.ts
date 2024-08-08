@@ -136,7 +136,7 @@ async function createToggleButtons(): Promise<void> {
 function updateButton(id: string, text: string, value: boolean): void {
   const button = document.getElementById(id);
   if (button !== null) {
-    button.innerHTML = `<span style="flex-grow: 1; text-align: left; padding-right: 10px;">${text}:</span><span>${value ? 'ON' : 'OFF'}</span>`;
+    button.innerHTML = `<span style="flex-grow: 1; text-align: left;">${text}:</span><span>${value ? 'ON' : 'OFF'}</span>`;
   }
 }
 
