@@ -20,7 +20,7 @@ let completed: boolean = false;
 let autoPlayEnabled: boolean = true;
 let backgroundAutoPlay: boolean = false;
 
-const HIDDEN_BACKGROUND_BUTTON: boolean = true;
+const HIDDEN_BACKGROUND_BUTTON: boolean = false;
 const RGB_COLOR_GREEN = 'rgb(0, 197, 65)';
 const TYPE_MOVIE_ROUNDED_PLUS = 'movie-rounded-plus';
 const REDIRECT_TIME = 3000;
@@ -77,16 +77,16 @@ function createToggleButton(
   bottom: number,
   value: boolean,
   handler: () => void,
-  maxWidth?: number,
-  minWidth?: number,
+  minWidth: number = 120,
+  maxWidth: number = 200,
 ): void {
   const button = document.createElement('button');
   button.id = id;
   button.style.cssText = BUTTON_STYLE;
   button.style.bottom = `${bottom}px`;
   button.style.right = '40px';
-  button.style.minWidth = `${minWidth ?? '120'}px`;
-  button.style.maxWidth = `${maxWidth ?? '120'}px`;
+  button.style.minWidth = `${minWidth}px`;
+  button.style.maxWidth = `${maxWidth}px`;
   button.innerHTML = `<span style="flex-grow: 1; text-align: left;">${text}:</span><span>${value ? 'ON' : 'OFF'}</span>`;
   button.addEventListener('click', handler);
   document.body.appendChild(button);
