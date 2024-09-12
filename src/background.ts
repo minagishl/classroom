@@ -1,5 +1,5 @@
-import browser from 'webextension-polyfill';
 import logger from 'logger';
+import browser from 'webextension-polyfill';
 
 browser.runtime.onInstalled.addListener(() => {
   void browser.storage.local.get('enabled').then(() => {

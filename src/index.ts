@@ -1,5 +1,5 @@
-import browser from 'webextension-polyfill';
 import logger from 'logger';
+import browser from 'webextension-polyfill';
 
 // Show in log when extension is loaded
 logger.info('Extension loaded.');
@@ -8,17 +8,17 @@ logger.info(
 );
 
 // Flags and constants
-let isEnabled: boolean = true;
+let isEnabled = true;
 let isValidPath: boolean | undefined;
-let lastExecutionTime: number = 0;
-let lastVideoPlayerTime: number = 0;
-let lastMovingVideoTime: number = 0;
-let previousVideoPlayer: boolean = false;
-let previousBackgroundAutoPlay: boolean = false;
+let lastExecutionTime = 0;
+let lastVideoPlayerTime = 0;
+let lastMovingVideoTime = 0;
+let previousVideoPlayer = false;
+let previousBackgroundAutoPlay = false;
 let videoPlayer: HTMLMediaElement | null = null;
-let completed: boolean = false;
-let autoPlayEnabled: boolean = true;
-let backgroundAutoPlay: boolean = false;
+let completed = false;
+let autoPlayEnabled = true;
+let backgroundAutoPlay = false;
 
 const HIDDEN_BACKGROUND_BUTTON: boolean = false;
 const RGB_COLOR_GREEN = 'rgb(0, 197, 65)';
@@ -77,8 +77,8 @@ function createToggleButton(
   bottom: number,
   value: boolean,
   handler: () => void,
-  minWidth: number = 120,
-  maxWidth: number = 200,
+  minWidth = 120,
+  maxWidth = 200,
 ): void {
   const button = document.createElement('button');
   button.id = id;
@@ -192,9 +192,12 @@ function handleVideoEnd(): void {
       }
       previousBackgroundAutoPlay = true;
       return;
-    } else if (document.hidden && backgroundAutoPlay) {
+    }
+
+    if (document.hidden && backgroundAutoPlay) {
       logger.info('Playback proceeds in the background');
     }
+
     previousBackgroundAutoPlay = false;
     logger.info('Video ended.');
 
@@ -252,8 +255,9 @@ let intervalId = setInterval(() => {
 function getVideoPlayer(): HTMLMediaElement | null {
   try {
     if (videoPlayer === null) {
-      const iframeElement =
-        document.querySelector<HTMLIFrameElement>('iframe[title="教材"]');
+      const iframeElement = document.querySelector<HTMLIFrameElement>(
+        'iframe[title="教材"]',
+      );
       const iframeDocument =
         iframeElement?.contentDocument ??
         iframeElement?.contentWindow?.document;
