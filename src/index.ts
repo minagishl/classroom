@@ -324,9 +324,10 @@ function getList(): ListItem[] {
       'div div div span:nth-child(2)',
     );
     const title = titleElement?.textContent?.trim() ?? '';
-    const iconElement = element.querySelector<HTMLElement>('div div div i');
+    const iconElement = element.querySelector<HTMLElement>('div > svg');
+    const iconColor = iconElement ? window.getComputedStyle(iconElement).color : '';
     const passed =
-      (iconElement?.style.color === RGB_COLOR_GREEN ||
+      (iconColor === RGB_COLOR_GREEN ||
         element.textContent?.includes('視聴済み')) ??
       false;
     const type =
