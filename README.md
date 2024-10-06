@@ -14,6 +14,8 @@ You can enable or disable this extension from the right-click menu.
 
 In no event shall the author or copyright holder be liable for any claim, damages or other obligation, whether in contract, tort or otherwise, arising out of or in connection with the Software or the use or other processing of the Software.
 
+> **Disclaimer:** This extension is intended for study assistance only. The developer is not responsible for any abuse by users.
+
 ## Supported Browsers
 
 > **Note:** For iOS devices, please use the Orion browser
