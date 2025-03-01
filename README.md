@@ -38,13 +38,13 @@ All data will be analyzed from the currently displayed web page and moved to the
 Install the required packages
 
 ```bash
-yarn install
+pnpm install
 ```
 
 Build the extension.
 
 ```bash
-yarn build
+pnpm build
 ```
 
 The following process is different for each browser, so please refer to the section for your browser
