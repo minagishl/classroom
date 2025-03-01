@@ -4,7 +4,8 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "build": "rimraf dist && node scripts/build.js",
+    "remove": "node scripts/rm.js",
+    "build": "pnpm run remove && node scripts/build.js",
     "check": "biome check ./src",
     "check:write": "biome check --write ./src",
     "format": "biome format .",
@@ -31,7 +32,6 @@
     "@typescript-eslint/parser": "^8.0.0",
     "archiver": "^7.0.1",
     "esbuild": "^0.25.0",
-    "rimraf": "^6.0.1",
     "typescript": "^5.7.3",
     "webextension-polyfill": "^0.12.0"
   }
