@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      glob:
-        specifier: ^11.0.1
-        version: 11.0.1
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.9.4
@@ -33,6 +29,9 @@ importers:
       esbuild:
         specifier: ^0.25.0
         version: 0.25.0
+      glob:
+        specifier: ^11.0.1
+        version: 11.0.1
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
