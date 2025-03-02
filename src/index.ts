@@ -26,7 +26,7 @@ const TYPE_MOVIE_ROUNDED_PLUS = 'movie-rounded-plus';
 const REDIRECT_TIME = 3000;
 const COOL_TIME = 5000;
 const BUTTON_STYLE = `
-  position: absolute;
+  position: fixed;
   z-index: 99999;
   padding: 10px;
   background-color: #007bff;
