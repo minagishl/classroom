@@ -50,7 +50,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: main
-          name: Release ${{ github.run_number }}
+          name: Release ${{ env.SHORT_SHA }}
           draft: false
           prerelease: false
           files: |
