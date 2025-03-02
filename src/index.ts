@@ -46,11 +46,20 @@ async function updateIsEnabled(): Promise<void> {
     'autoPlayEnabled',
     'backgroundAutoPlay',
   ]);
-  isEnabled = data.enabled !== undefined ? data.enabled : true;
+  isEnabled =
+    data.enabled !== undefined && typeof data.enabled === 'boolean'
+      ? data.enabled
+      : true;
   autoPlayEnabled =
-    data.autoPlayEnabled !== undefined ? data.autoPlayEnabled : true;
+    data.autoPlayEnabled !== undefined &&
+    typeof data.autoPlayEnabled === 'boolean'
+      ? data.autoPlayEnabled
+      : true;
   backgroundAutoPlay =
-    data.backgroundAutoPlay !== undefined ? data.backgroundAutoPlay : false;
+    data.backgroundAutoPlay !== undefined &&
+    typeof data.backgroundAutoPlay === 'boolean'
+      ? data.backgroundAutoPlay
+      : false;
   if (isEnabled) {
     await browser.storage.local.set({ enabled: true });
   }
@@ -163,17 +172,26 @@ void createToggleButtons();
 
 browser.storage.onChanged.addListener((changes) => {
   if (changes.enabled !== undefined) {
-    isEnabled = changes.enabled.newValue;
+    isEnabled =
+      typeof changes.enabled.newValue === 'boolean'
+        ? changes.enabled.newValue
+        : isEnabled;
     logger.info(`Extension is now ${isEnabled ? 'enabled' : 'disabled'}`);
     window.alert(`Extension is now ${isEnabled ? 'enabled' : 'disabled'}`);
     updateButtons();
   }
   if (changes.autoPlayEnabled !== undefined) {
-    autoPlayEnabled = changes.autoPlayEnabled.newValue;
+    autoPlayEnabled =
+      typeof changes.autoPlayEnabled.newValue === 'boolean'
+        ? changes.autoPlayEnabled.newValue
+        : autoPlayEnabled;
     updateButtons();
   }
   if (changes.backgroundAutoPlay !== undefined) {
-    backgroundAutoPlay = changes.backgroundAutoPlay.newValue;
+    backgroundAutoPlay =
+      typeof changes.backgroundAutoPlay.newValue === 'boolean'
+        ? changes.backgroundAutoPlay.newValue
+        : backgroundAutoPlay;
     updateButtons();
   }
 });
@@ -325,7 +343,9 @@ function getList(): ListItem[] {
     );
     const title = titleElement?.textContent?.trim() ?? '';
     const iconElement = element.querySelector<HTMLElement>('div > svg');
-    const iconColor = iconElement ? window.getComputedStyle(iconElement).color : '';
+    const iconColor = iconElement
+      ? window.getComputedStyle(iconElement).color
+      : '';
     const passed =
       (iconColor === RGB_COLOR_GREEN ||
         element.textContent?.includes('視聴済み')) ??
