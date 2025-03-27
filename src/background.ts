@@ -24,6 +24,13 @@ browser.runtime.onInstalled.addListener(() => {
       title: 'Return to chapter on completion',
       contexts: ['all'],
     });
+
+    browser.contextMenus.create({
+      id: 'hideUI',
+      parentId: 'classroom',
+      title: 'Hide UI buttons',
+      contexts: ['all'],
+    });
   });
 });
 
@@ -42,6 +49,12 @@ browser.contextMenus.onClicked.addListener((info) => {
         logger.info(
           `Return to chapter is now ${returnToChapter ? 'enabled' : 'disabled'}`,
         );
+      });
+    } else if (info.menuItemId === 'hideUI') {
+      void browser.storage.local.get('hideUI').then((data) => {
+        const hideUI = data.hideUI !== true; // Toggle the hideUI state
+        void browser.storage.local.set({ hideUI });
+        logger.info(`UI buttons are now ${hideUI ? 'hidden' : 'visible'}`);
       });
     }
   } catch (error) {

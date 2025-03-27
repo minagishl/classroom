@@ -20,6 +20,7 @@ let completed = false;
 let autoPlayEnabled = true;
 let backgroundAutoPlay = false;
 let returnToChapter = true;
+let hideUI = false;
 
 const HIDDEN_BACKGROUND_BUTTON: boolean = false;
 const RGB_COLOR_GREEN = 'rgb(0, 197, 65)';
@@ -47,6 +48,7 @@ async function updateIsEnabled(): Promise<void> {
     'autoPlayEnabled',
     'backgroundAutoPlay',
     'returnToChapter',
+    'hideUI',
   ]);
   isEnabled =
     data.enabled !== undefined && typeof data.enabled === 'boolean'
@@ -67,6 +69,10 @@ async function updateIsEnabled(): Promise<void> {
     typeof data.returnToChapter === 'boolean'
       ? data.returnToChapter
       : true;
+  hideUI =
+    data.hideUI !== undefined && typeof data.hideUI === 'boolean'
+      ? data.hideUI
+      : false;
   if (isEnabled) {
     await browser.storage.local.set({ enabled: true });
   }
@@ -96,6 +102,7 @@ function createToggleButton(
   minWidth = 120,
   maxWidth = 200,
 ): void {
+  if (hideUI) return;
   const button = document.createElement('button');
   button.id = id;
   button.style.cssText = BUTTON_STYLE;
@@ -209,6 +216,28 @@ browser.storage.onChanged.addListener((changes) => {
     window.alert(
       `Return to chapter is now ${returnToChapter ? 'enabled' : 'disabled'}`,
     );
+  }
+  if (changes.hideUI !== undefined) {
+    hideUI =
+      typeof changes.hideUI.newValue === 'boolean'
+        ? changes.hideUI.newValue
+        : hideUI;
+    window.alert(`UI buttons are now ${hideUI ? 'hidden' : 'visible'}`);
+
+    // Remove existing buttons if UI is hidden
+    if (hideUI) {
+      for (const id of [
+        'autoPlayToggleButton',
+        'extensionToggleButton',
+        'backgroundAutoPlayToggleButton',
+      ]) {
+        const button = document.getElementById(id);
+        if (button) button.remove();
+      }
+    } else {
+      // Recreate buttons if UI is shown
+      void createToggleButtons();
+    }
   }
 });
 
