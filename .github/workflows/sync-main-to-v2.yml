@@ -6,21 +6,23 @@ on:
       - main
 
 jobs:
-  sync-branches:
+  sync:
+    name: Branch
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Configure Git
+      - name: Set up Git identity
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
 
-      - name: Sync main to v2
+      - name: Sync with v2 branch
         run: |
+          git fetch origin v2
           git checkout v2
-          git merge main
-          git push origin v2
+          git reset --hard main
+          git push -f
