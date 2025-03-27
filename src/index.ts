@@ -181,8 +181,10 @@ function updateButtons(): void {
   );
 }
 
-void updateIsEnabled();
-void createToggleButtons();
+void (async () => {
+  await updateIsEnabled();
+  await createToggleButtons();
+})().catch(logger.error);
 
 browser.storage.onChanged.addListener((changes) => {
   if (changes.enabled !== undefined) {
