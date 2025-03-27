@@ -49,7 +49,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: main
+          tag_name: release
           name: Release ${{ env.SHORT_SHA }}
           draft: false
           prerelease: false
