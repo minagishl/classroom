@@ -32,13 +32,13 @@
 必要なパッケージをインストール
 
 ```bash
-yarn install
+pnpm install
 ```
 
 拡張機能をビルド。
 
 ```bash
-yarn build
+pnpm build
 ```
 
 以下の手順は各ブラウザごとに異なるので、各ブラウザのセクションを参照してください。
