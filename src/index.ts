@@ -19,6 +19,7 @@ let videoPlayer: HTMLMediaElement | null = null;
 let completed = false;
 let autoPlayEnabled = true;
 let backgroundAutoPlay = false;
+let returnToChapter = true;
 
 const HIDDEN_BACKGROUND_BUTTON: boolean = false;
 const RGB_COLOR_GREEN = 'rgb(0, 197, 65)';
@@ -45,6 +46,7 @@ async function updateIsEnabled(): Promise<void> {
     'enabled',
     'autoPlayEnabled',
     'backgroundAutoPlay',
+    'returnToChapter',
   ]);
   isEnabled =
     data.enabled !== undefined && typeof data.enabled === 'boolean'
@@ -60,6 +62,11 @@ async function updateIsEnabled(): Promise<void> {
     typeof data.backgroundAutoPlay === 'boolean'
       ? data.backgroundAutoPlay
       : false;
+  returnToChapter =
+    data.returnToChapter !== undefined &&
+    typeof data.returnToChapter === 'boolean'
+      ? data.returnToChapter
+      : true;
   if (isEnabled) {
     await browser.storage.local.set({ enabled: true });
   }
@@ -194,6 +201,15 @@ browser.storage.onChanged.addListener((changes) => {
         : backgroundAutoPlay;
     updateButtons();
   }
+  if (changes.returnToChapter !== undefined) {
+    returnToChapter =
+      typeof changes.returnToChapter.newValue === 'boolean'
+        ? changes.returnToChapter.newValue
+        : returnToChapter;
+    window.alert(
+      `Return to chapter is now ${returnToChapter ? 'enabled' : 'disabled'}`,
+    );
+  }
 });
 
 function handleVideoEnd(): void {
@@ -232,14 +248,16 @@ function handleVideoEnd(): void {
       completed = true;
       window.alert('All videos have been completed.');
       logger.info('All videos have been completed.');
-      logger.info(`Move to chapter after ${REDIRECT_TIME / 1000} seconds...`);
 
-      setTimeout(() => {
-        const url = new URL(window.location.href);
-        const course = url.pathname.split('/')[2];
-        const chapter = url.pathname.split('/')[4];
-        window.location.href = `/courses/${course}/chapters/${chapter}`;
-      }, REDIRECT_TIME);
+      if (returnToChapter) {
+        logger.info(`Move to chapter after ${REDIRECT_TIME / 1000} seconds...`);
+        setTimeout(() => {
+          const url = new URL(window.location.href);
+          const course = url.pathname.split('/')[2];
+          const chapter = url.pathname.split('/')[4];
+          window.location.href = `/courses/${course}/chapters/${chapter}`;
+        }, REDIRECT_TIME);
+      }
     }
   }
 }

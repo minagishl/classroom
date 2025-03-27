@@ -10,11 +10,18 @@ browser.runtime.onInstalled.addListener(() => {
       contexts: ['all'],
     });
 
-    // Create the toggle submenu item under Classroom
+    // Create the toggle submenu items under Classroom
     browser.contextMenus.create({
       id: 'toggle',
       parentId: 'classroom',
       title: 'Toggle enabled',
+      contexts: ['all'],
+    });
+
+    browser.contextMenus.create({
+      id: 'returnToChapter',
+      parentId: 'classroom',
+      title: 'Return to chapter on completion',
       contexts: ['all'],
     });
   });
@@ -27,6 +34,14 @@ browser.contextMenus.onClicked.addListener((info) => {
         const enabled = data.enabled !== true; // Toggle the enabled state
         void browser.storage.local.set({ enabled });
         logger.info(`Extension is now ${enabled ? 'enabled' : 'disabled'}`);
+      });
+    } else if (info.menuItemId === 'returnToChapter') {
+      void browser.storage.local.get('returnToChapter').then((data) => {
+        const returnToChapter = data.returnToChapter !== true; // Toggle the return to chapter state
+        void browser.storage.local.set({ returnToChapter });
+        logger.info(
+          `Return to chapter is now ${returnToChapter ? 'enabled' : 'disabled'}`,
+        );
       });
     }
   } catch (error) {
