@@ -26,14 +26,14 @@
   "description": "This extension automatically plays videos from school study sites",
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/chrome": "^0.0.307",
+    "@types/chrome": "^0.0.312",
     "@types/webextension-polyfill": "^0.12.3",
-    "@typescript-eslint/eslint-plugin": "^8.25.0",
-    "@typescript-eslint/parser": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
     "archiver": "^7.0.1",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.25.1",
     "glob": "^11.0.1",
-    "typescript": "^5.7.3",
+    "typescript": "^5.8.2",
     "webextension-polyfill": "^0.12.0"
   },
   "pnpm": {
