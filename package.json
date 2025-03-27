@@ -1,0 +1,45 @@
+{
+  "name": "classroom",
+  "version": "1.9.0",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "remove": "node scripts/rm.js",
+    "build": "pnpm run remove && node scripts/build.js",
+    "check": "biome check ./src",
+    "check:write": "biome check --write ./src",
+    "format": "biome format .",
+    "format:write": "biome format --write ./src",
+    "lint": "biome lint ./src",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/minagishl/classroom.git"
+  },
+  "author": "minagishl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/minagishl/classroom/issues"
+  },
+  "homepage": "https://github.com/minagishl/classroom#readme",
+  "description": "This extension automatically plays videos from school study sites",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/chrome": "^0.0.307",
+    "@types/webextension-polyfill": "^0.12.3",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "archiver": "^7.0.1",
+    "esbuild": "^0.25.0",
+    "glob": "^11.0.1",
+    "typescript": "^5.7.3",
+    "webextension-polyfill": "^0.12.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "esbuild"
+    ]
+  }
+}
