@@ -26,10 +26,9 @@ In no event shall the author or copyright holder be liable for any claim, damage
 - Orion (Install from Google Webstore)
 
 <!-- Tested on all browsers! Orion is complicated, so contact me (if you want to contact me on N-High School's Slack, follow this link https://n-highschool.slack.com/archives/C06T3T1E3C1) -->
-
 ## To School Officials
 
-This application does not interfere in any way with N Prep School's servers.
+This application does not interfere in any way with ZEN Study's servers.
 
 All data will be analyzed from the currently displayed web page and moved to the next video
 
