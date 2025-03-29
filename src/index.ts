@@ -383,9 +383,23 @@ function findIndex(data: ListItem[]): number {
 }
 
 function getList(): ListItem[] {
-  const elements = document.querySelectorAll<HTMLLIElement>(
+  let elements: NodeListOf<HTMLLIElement>;
+
+  elements = document.querySelectorAll<HTMLLIElement>(
     'ul[aria-label="必修教材リスト"] > li',
   );
+
+  if (elements.length === 0) {
+    elements = document.querySelectorAll<HTMLLIElement>(
+      'ul[aria-label="課外教材リスト"] > li',
+    );
+
+    if (elements.length === 0) {
+      logger.error('No elements found.');
+      return [];
+    }
+  }
+
   return Array.from(elements).map((element) => {
     const titleElement = element.querySelector<HTMLSpanElement>(
       'div div div span:nth-child(2)',
@@ -397,7 +411,8 @@ function getList(): ListItem[] {
       : '';
     const passed =
       (iconColor === RGB_COLOR_GREEN ||
-        element.textContent?.includes('視聴済み')) ??
+        element.textContent?.includes('視聴済み') ||
+        element.textContent?.includes('理解した')) ??
       false;
     const type =
       iconElement?.getAttribute('type') === TYPE_MOVIE_ROUNDED_PLUS
@@ -409,9 +424,18 @@ function getList(): ListItem[] {
 
 async function moveElement(number: number): Promise<void> {
   await new Promise<void>((resolve, reject) => {
-    const element = document.querySelector<HTMLElement>(
+    let element: HTMLElement | null = null;
+
+    element = document.querySelector<HTMLElement>(
       `ul[aria-label="必修教材リスト"] li:nth-child(${number}) div`,
     );
+
+    if (element === null) {
+      element = document.querySelector<HTMLElement>(
+        `ul[aria-label="課外教材リスト"] li:nth-child(${number}) div`,
+      );
+    }
+
     if (element === null) {
       reject(
         new Error(`Error: cannot find an element with the number ${number}`),
