@@ -21,6 +21,7 @@ let autoPlayEnabled = true;
 let backgroundAutoPlay = false;
 let returnToChapter = true;
 let hideUI = false;
+let userInteracted = false;
 
 const HIDDEN_BACKGROUND_BUTTON: boolean = false;
 const RGB_COLOR_GREEN = 'rgb(0, 197, 65)';
@@ -243,6 +244,28 @@ browser.storage.onChanged.addListener((changes) => {
   }
 });
 
+function createPlayButton(video: HTMLMediaElement): void {
+  if (hideUI) return;
+
+  const existingButton = document.getElementById('videoPlayButton');
+  if (existingButton) return;
+
+  const button = document.createElement('button');
+  button.id = 'videoPlayButton';
+  button.style.cssText = BUTTON_STYLE;
+  button.style.bottom = '130px';
+  button.style.right = '40px';
+  button.innerHTML = '<span>Play Video</span>';
+
+  button.addEventListener('click', () => {
+    userInteracted = true;
+    video.play().catch(logger.error);
+    button.remove();
+  });
+
+  document.body.appendChild(button);
+}
+
 function handleVideoEnd(): void {
   const now = Date.now();
   if (
@@ -304,9 +327,14 @@ let intervalId = setInterval(() => {
       videoPlayer.setAttribute('autoplay', '');
       videoPlayer.setAttribute('controls', '');
 
+      if (!previousVideoPlayer) {
+        logger.info('Video player found.');
+        createPlayButton(videoPlayer);
+      }
+
       if (videoPlayer.ended) {
         handleVideoEnd();
-      } else if (autoPlayEnabled && videoPlayer.paused) {
+      } else if (userInteracted && autoPlayEnabled && videoPlayer.paused) {
         videoPlayer.play().catch(logger.error);
       } else {
         videoPlayer.addEventListener('ended', handleVideoEnd);
@@ -345,7 +373,10 @@ const observer = new MutationObserver(() => {
     if (getIsValidPath()) {
       videoPlayer = getVideoPlayer();
       if (videoPlayer !== null) {
-        if (!previousVideoPlayer) logger.info('Video player found.');
+        if (!previousVideoPlayer) {
+          logger.info('Video player found.');
+          createPlayButton(videoPlayer);
+        }
         previousVideoPlayer = true;
 
         videoPlayer.setAttribute('playsinline', '');
@@ -355,7 +386,7 @@ const observer = new MutationObserver(() => {
 
         if (videoPlayer.ended) {
           handleVideoEnd();
-        } else if (autoPlayEnabled && videoPlayer.paused) {
+        } else if (userInteracted && autoPlayEnabled && videoPlayer.paused) {
           videoPlayer.play().catch(logger.error);
         } else {
           videoPlayer.addEventListener('ended', handleVideoEnd);
